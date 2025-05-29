@@ -1,6 +1,8 @@
-openai
 google-auth
 google-auth-oauthlib
-pytrends
-requests
+google-api-python-client
+openai
 schedule
+requests
+beautifulsoup4
+pytrends
