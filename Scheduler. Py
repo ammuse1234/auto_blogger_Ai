@@ -1,0 +1,14 @@
+import schedule
+import time
+from blogger import create_daily_blog, post_to_all_blogs
+
+def start_scheduler():
+    create_daily_blog()
+    post_to_all_blogs()  # أول نشر مباشر
+
+    schedule.every().day.at("00:00").do(create_daily_blog)
+    schedule.every(30).minutes.do(post_to_all_blogs)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
