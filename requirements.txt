@@ -1,6 +1,0 @@
-flask
-requests
-beautifulsoup4
-google-api-python-client
-oauth2client
-pytrends
