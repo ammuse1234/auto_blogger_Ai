@@ -2,12 +2,12 @@ services:
   - type: worker
     name: auto_blogger_Ai
     runtime: python
+    repo: https://github.com/ammuse1234/auto_blogger_Ai
+    branch: main
     buildCommand: pip install -r requirements.txt
     startCommand: python run_once.py
     envVars:
       - key: GOOGLE_CLIENT_SECRET_FILE
-        value: /etc/secrets/client_secret.json
-    secretFiles:
-      - path: /etc/secrets/client_secret.json
-        contents: 
-          fromFile: client_secret.json
+        value: client_secret.json
+    region: oregon
+    plan: free
