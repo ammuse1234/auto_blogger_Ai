@@ -9,3 +9,4 @@ schedule
 openai
 tqdm
 python-dotenv
+beautifulsoup4
