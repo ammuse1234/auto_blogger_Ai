@@ -5,7 +5,7 @@ services:
     repo: https://github.com/ammuse1234/auto_blogger_Ai
     branch: main
     buildCommand: pip install -r requirements.txt
-    startCommand: python run_once.py
+    startCommand: python main.py 
     envVars:
       - key: CLIENT_SECRET_JSON
         sync: false
