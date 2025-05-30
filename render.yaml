@@ -7,7 +7,7 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python run_once.py
     envVars:
-      - key: GOOGLE_CLIENT_SECRET_FILE
-        value: client_secret.json
+      - key: CLIENT_SECRET_JSON
+        sync: false
     region: oregon
     plan: free
