@@ -1,11 +1,11 @@
 import os
 import requests
-from auth import get_access_token
+from auth import get_authenticated_service 
 
 BLOG_ID = os.getenv("BLOG_ID")
 
 def post_to_blogger(title, content, labels=None):
-    access_token = get_access_token()
+    service = get_authenticated_service()
     url = f"https://www.googleapis.com/blogger/v3/blogs/{BLOG_ID}/posts/"
     headers = {
         "Authorization": f"Bearer {access_token}",
