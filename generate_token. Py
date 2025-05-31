@@ -1,0 +1,45 @@
+import requests
+
+# عبي بياناتك هنا من ملف Google OAuth JSON
+CLIENT_ID = '151889146614-7eptmsrvdscebhn150pk2boo4nui2ac6.apps.googleusercontent.com'
+CLIENT_SECRET = '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'
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
+# رابط تسجيل الدخول وإعطاء الصلاحية
+auth_url = (
+    'https://accounts.google.com/o/oauth2/v2/auth'
+    '?response_type=code'
+    f'&client_id={CLIENT_ID}'
+    f'&redirect_uri={REDIRECT_URI}'
+    '&scope=https://www.googleapis.com/auth/blogger'
+    '&access_type=offline'
+    '&prompt=consent'
+)
+
+print('🔗 انسخ هذا الرابط وافتحه في المتصفح:')
+print(auth_url)
+
+# هنا تلصق كود التفويض اللي يعطيك إياه Google
+auth_code = input('📥 الصق الكود من المتصفح هنا: ').strip()
+
+# طلب التوكن من Google
+token_url = 'https://oauth2.googleapis.com/token'
+
+data = {
+    'code': auth_code,
+    'client_id': CLIENT_ID,
+    'client_secret': CLIENT_SECRET,
+    'redirect_uri': REDIRECT_URI,
+    'grant_type': 'authorization_code'
+}
+
+# نرسل الطلب ونطبع الناتج
+response = requests.post(token_url, data=data)
+tokens = response.json()
+
+if 'refresh_token' in tokens:
+    print('\n✅ هذا هو REFRESH_TOKEN حقك:')
+    print(tokens['refresh_token'])
+else:
+    print('\n❌ ما طلع التوكن. هذا الرد من السيرفر:')
+    print(tokens)
