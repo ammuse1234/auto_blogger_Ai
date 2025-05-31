@@ -1,27 +1,24 @@
 import os
-import pickle
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
+import json
+import google.auth.transport.requests
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
-SCOPES = ['https://www.googleapis.com/auth/blogger']
-
+# تحميل بيانات الاعتماد من ملف JSON
 def get_authenticated_service():
-    creds = None
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
-            creds = pickle.load(token)
+    creds_path = os.getenv("GOOGLE_CREDENTIALS_FILE", "client_secret.json")
+    if not os.path.exists(creds_path):
+        raise FileNotFoundError(f"Credentials file not found: {creds_path}")
 
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'client_secret.json', SCOPES)
-            creds = flow.run_local_server(port=0)
+    with open(creds_path, "r") as f:
+        creds_data = json.load(f)
 
-        with open('token.pickle', 'wb') as token:
-            pickle.dump(creds, token)
+    creds = Credentials.from_authorized_user_info(info=creds_data)
 
-    service = build('blogger', 'v3', credentials=creds)
+    # التأكد من صلاحية التوكن
+    if creds.expired and creds.refresh_token:
+        creds.refresh(google.auth.transport.requests.Request())
+
+    # خدمة blogger
+    service = build("blogger", "v3", credentials=creds)
     return service
