@@ -2,7 +2,9 @@ import os
 import random
 from datetime import datetime
 from post import post_to_blogger
+import openai
 
+openai.api_key = os.getenv("OPENAI_API_KEY")
 # استدعاء BLOG_ID من المتغيرات السرية
 BLOG_ID = os.getenv("BLOG_ID")
 
