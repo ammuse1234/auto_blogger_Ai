@@ -1,14 +1,37 @@
-from auth import get_authenticated_service
+import os
 from blogger import create_blog
-import datetime
+import requests
 
-def create_daily_blog():
-    service = get_authenticated_service()
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
-    blog_title = f"AI Blog - {today}"
-    blog_url = f"ai-blog-{today.replace('-', '')}"
+def get_access_token():
+    """استخراج access token باستخدام refresh token الموجود في GitHub Secrets"""
+    client_id = os.environ['CLIENT_ID']
+    client_secret = os.environ['CLIENT_SECRET']
+    refresh_token = os.environ['REFRESH_TOKEN']
 
-    create_blog(service, blog_title, blog_url)
+    token_url = 'https://oauth2.googleapis.com/token'
+    payload = {
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'refresh_token': refresh_token,
+        'grant_type': 'refresh_token'
+    }
+
+    response = requests.post(token_url, data=payload)
+    if response.status_code == 200:
+        return response.json()['access_token']
+    else:
+        raise Exception(f"❌ Failed to get access token: {response.text}")
+
+def main():
+    # إعدادات المدونة الجديدة
+    blog_title = "Daily AI Blog"
+    blog_description = "This blog is automatically created using AI and Blogger API."
+
+    # استخراج التوكن
+    access_token = get_access_token()
+
+    # إنشاء المدونة
+    create_blog(blog_title, blog_description, access_token)
 
 if __name__ == "__main__":
-    create_daily_blog()
+    main() 
