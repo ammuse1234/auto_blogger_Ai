@@ -10,6 +10,10 @@ if client_secret_content:
 from trends import get_trending_topics
 from article_generator import generate_article
 from blogger import create_post
+from create_blog import create_blog
+
+if __name__ == "__main__":
+    create_blog()
 
 def main():
     topics = get_trending_topics()
