@@ -1,24 +1,27 @@
 import os
-import json
-import google.auth.transport.requests
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
+import requests
 
-# تحميل بيانات الاعتماد من ملف JSON
-def get_authenticated_service():
-    creds_path = os.getenv("GOOGLE_CREDENTIALS_FILE", "client_secret.json")
-    if not os.path.exists(creds_path):
-        raise FileNotFoundError(f"Credentials file not found: {creds_path}")
+def get_access_token():
+    refresh_token = os.environ.get('REFRESH_TOKEN')
+    client_id = os.environ.get('CLIENT_ID')
+    client_secret = os.environ.get('CLIENT_SECRET')
 
-    with open(creds_path, "r") as f:
-        creds_data = json.load(f)
+    if not all([refresh_token, client_id, client_secret]):
+        raise Exception("❌ Missing one or more required environment variables: REFRESH_TOKEN, CLIENT_ID, CLIENT_SECRET")
 
-    creds = Credentials.from_authorized_user_info(info=creds_data)
+    token_url = 'https://oauth2.googleapis.com/token'
+    data = {
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'refresh_token': refresh_token,
+        'grant_type': 'refresh_token',
+    }
 
-    # التأكد من صلاحية التوكن
-    if creds.expired and creds.refresh_token:
-        creds.refresh(google.auth.transport.requests.Request())
-
-    # خدمة blogger
-    service = build("blogger", "v3", credentials=creds)
-    return service
+    response = requests.post(token_url, data=data)
+    if response.status_code == 200:
+        access_token = response.json().get('access_token')
+        if not access_token:
+            raise Exception("❌ Failed to get access_token from response.")
+        return access_token
+    else:
+        raise Exception(f"❌ Failed to refresh token: {response.status_code} - {response.text}")
