@@ -1,26 +1,37 @@
 import os
-from auth import get_access_token
-from blogger import post_to_blogger
-from content_generator import generate_article
-from google_trends import get_trending_topics
-from daily_create_blog import create_blog
-# احصل على blog_id من Secrets
-BLOG_ID = os.environ.get("BLOG_ID")
+import random
+from datetime import datetime
+from post import post_to_blogger
 
-def main():
-    # احصل على التوكن
-    access_token = get_access_token()
+# استدعاء BLOG_ID من المتغيرات السرية
+BLOG_ID = os.getenv("BLOG_ID")
 
-    # جلب المواضيع الرائجة
-    topics = get_trending_topics()
+# توليد مقال وهمي من مجموعة
+def generate_fake_article():
+    titles = [
+        "Top AI Tools for 2025",
+        "How to Stay Productive with Automation",
+        "Trending Topics This Week",
+        "Simple Guide to Blogging with AI",
+        "The Future of Content Creation"
+    ]
+    contents = [
+        "<p>Welcome to today’s post! We explore how AI is changing the content landscape.</p>",
+        "<p>This blog is powered by automation! Here are the benefits...</p>",
+        "<p>Here are the top 5 trends right now:</p><ul><li>AI</li><li>Automation</li><li>SEO</li></ul>",
+        "<p>Blogging has never been easier. Thanks to Python and Google APIs!</p>",
+        "<p>AI is not just the future, it's now. Let's explore how...</p>"
+    ]
+    labels = ["AI", "Automation", "Trends", "Guide", "Future"]
 
-    if topics:
-        for topic in topics[:1]:  # انشر مقال واحد فقط (يمكنك إزالة [:1] إذا تريد الكل)
-            title, content = generate_article(topic)
-            post_to_blogger(BLOG_ID, title, content, access_token)
-            print(f"✅ تم النشر: {title}")
-    else:
-        print("❌ لا توجد مواضيع تريند حالياً.")
+    index = random.randint(0, len(titles) - 1)
+    title = titles[index] + f" ({datetime.now().strftime('%H:%M')})"
+    content = contents[index]
+    label = [labels[index]]
 
+    return title, content, label
+
+# تنفيذ النشر
 if __name__ == "__main__":
-    main()
+    title, content, labels = generate_fake_article()
+    post_to_blogger(BLOG_ID, title, content, labels)
