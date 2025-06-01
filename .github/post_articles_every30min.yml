@@ -1,0 +1,31 @@
+name: ✍️ Auto Post Articles Every 30 Minutes
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # ⏰ كل 30 دقيقة
+  workflow_dispatch:         # ✅ تشغيل يدوي عند الحاجة
+
+jobs:
+  post_articles:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: 📦 Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: 📝 Run Article Posting Script
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          BLOG_ID: ${{ secrets.BLOG_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python main.py
