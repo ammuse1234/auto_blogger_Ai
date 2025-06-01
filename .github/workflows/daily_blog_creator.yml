@@ -23,4 +23,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run daily blog creator
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         run: python daily_create_blog.py
