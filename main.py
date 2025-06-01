@@ -34,7 +34,9 @@ def generate_fake_article():
     selected_label = [labels[index]]
 
     return title, content, selected_label
-
+print("🔍 CLIENT_ID:", os.getenv("CLIENT_ID"))
+print("🔍 CLIENT_SECRET:", os.getenv("CLIENT_SECRET"))
+print("🔍 REFRESH_TOKEN:", os.getenv("REFRESH_TOKEN"))
 # تنفيذ النشر
 if __name__ == "__main__":
     title, content, labels = generate_fake_article()
