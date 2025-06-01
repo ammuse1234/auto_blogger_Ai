@@ -1,37 +1,35 @@
 import os
-from blogger import create_blog
 import requests
+from datetime import datetime
+from auth import get_access_token
 
-def get_access_token():
-    """استخراج access token باستخدام refresh token الموجود في GitHub Secrets"""
-    client_id = os.environ['CLIENT_ID']
-    client_secret = os.environ['CLIENT_SECRET']
-    refresh_token = os.environ['REFRESH_TOKEN']
-
-    token_url = 'https://oauth2.googleapis.com/token'
-    payload = {
-        'client_id': client_id,
-        'client_secret': client_secret,
-        'refresh_token': refresh_token,
-        'grant_type': 'refresh_token'
+def create_blog(title, description, access_token):
+    url = "https://www.googleapis.com/blogger/v3/blogs"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+    body = {
+        "kind": "blogger#blog",
+        "name": title,
+        "description": description
     }
 
-    response = requests.post(token_url, data=payload)
+    response = requests.post(url, headers=headers, json=body)
     if response.status_code == 200:
-        return response.json()['access_token']
+        print(f"✅ Blog created: {response.json()['name']}")
+        print(f"🆔 Blog ID: {response.json()['id']}")
     else:
-        raise Exception(f"❌ Failed to get access token: {response.text}")
+        print(f"❌ Failed to create blog: {response.status_code} - {response.text}")
 
 def main():
-    # إعدادات المدونة الجديدة
-    blog_title = "Daily AI Blog"
-    blog_description = "This blog is automatically created using AI and Blogger API."
+    # توليد اسم مدونة فريد حسب التاريخ
+    today = datetime.now().strftime("%Y-%m-%d")
+    blog_title = f"Auto AI Blog - {today}"
+    blog_description = "This blog is created automatically using Blogger API and Python."
 
-    # استخراج التوكن
     access_token = get_access_token()
-
-    # إنشاء المدونة
     create_blog(blog_title, blog_description, access_token)
 
 if __name__ == "__main__":
-    main() 
+    main()
