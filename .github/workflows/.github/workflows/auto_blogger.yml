@@ -1,16 +1,16 @@
-name: Auto Blogger AI
+name: Auto Blogger
 
 on:
   schedule:
-    - cron: "*/30 * * * *"  # كل 30 دقيقة
-  workflow_dispatch:
+    - cron: '*/30 * * * *'  # تشغيل كل 30 دقيقة
+  workflow_dispatch:        # تشغيل يدوي من GitHub لو احتجت
 
 jobs:
-  run-script:
+  post_to_blogger:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -22,5 +22,11 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run main script
-        run: python main.py
+      - name: Run Blogger Script
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          BLOG_ID: ${{ secrets.BLOG_ID }}
+        run: |
+          python main.py
