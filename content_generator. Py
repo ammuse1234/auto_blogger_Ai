@@ -1,0 +1,11 @@
+from datetime import datetime
+
+def generate_article():
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    title = f"AI Trends Update - {now}"
+    content = f"""
+    <h1>AI Trends as of {now}</h1>
+    <p>This is an automatically generated article about the latest trends in artificial intelligence.</p>
+    <p>Stay tuned for more updates every 30 minutes.</p>
+    """
+    return title, content
