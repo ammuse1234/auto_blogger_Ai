@@ -29,7 +29,7 @@ def generate_fake_article():
     index = random.randint(0, len(titles) - 1)
     title = titles[index] + f" ({datetime.now().strftime('%H:%M')})"
     content = contents[index]
-    label = [labels[index]]
+    labels = [labels[index]]
 
     return title, content, label
 
