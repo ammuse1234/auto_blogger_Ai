@@ -31,7 +31,7 @@ def generate_fake_article():
     content = contents[index]
     labels = [labels[index]]
 
-    return title, content, label
+    return title, content, labels
 
 # تنفيذ النشر
 if __name__ == "__main__":
