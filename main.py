@@ -7,7 +7,37 @@ if client_secret_content:
     with open("client_secret.json", "w") as f:
         f.write(client_secret_content)
         
-from trends import get_trending_topics
+import random
+from post import post_to_blogger
+import os
+from datetime import datetime
+
+blog_id = os.environ['BLOG_ID']
+
+# 👇 نموذج توليد مقال عشوائي بسيط
+def generate_post():
+    titles = [
+        "Top AI Tools for 2025",
+        "How to Stay Productive with Automation",
+        "Trending Topics This Week",
+        "Simple Guide to Blogging with AI",
+        "The Future of Content Creation"
+    ]
+    contents = [
+        "<p>Welcome to today’s post! We explore how AI is changing the content landscape.</p>",
+        "<p>This blog is powered by automation! Here are the benefits...</p>",
+        "<p>Here are the top 5 trends right now:</p><ul><li>AI</li><li>Automation</li><li>SEO</li></ul>",
+        "<p>Blogging has never been easier. Thanks to Python and Google APIs!</p>",
+        "<p>AI is not just the future, it's now. Let's explore how...</p>"
+    ]
+
+    title = random.choice(titles) + f" ({datetime.now().strftime('%H:%M')})"
+    content = random.choice(contents)
+    return title, content
+
+if __name__ == "__main__":
+    title, content = generate_post()
+    post_to_blogger(blog_id, title, content)nds import get_trending_topics
 from article_generator import generate_article
 from blogger import create_post
 from create_blog import create_blog
