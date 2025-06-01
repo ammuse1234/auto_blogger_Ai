@@ -3,7 +3,7 @@ from auth import get_access_token
 from blogger import post_to_blogger
 from content_generator import generate_article
 from google_trends import get_trending_topics
-
+from daily_create_blog import create_blog
 # احصل على blog_id من Secrets
 BLOG_ID = os.environ.get("BLOG_ID")
 
