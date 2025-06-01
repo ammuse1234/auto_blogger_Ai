@@ -9,7 +9,7 @@ if client_secret_content:
         
 from trends import get_trending_topics
 from article_generator import generate_article
-from blogger import post_to_blogger
+from blogger import create_post
 
 def main():
     topics = get_trending_topics()
