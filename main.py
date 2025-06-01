@@ -37,7 +37,8 @@ def generate_post():
 
 if __name__ == "__main__":
     title, content = generate_post()
-    post_to_blogger(blog_id, title, content)nds import get_trending_topics
+    post_to_blogger(blog_id, title, content)
+    import get_trending_topics
 from article_generator import generate_article
 from blogger import create_post
 from create_blog import create_blog
