@@ -54,3 +54,25 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+import random
+from blogger import post_to_blogger
+import os
+
+BLOG_ID = os.getenv("BLOG_ID")
+
+def generate_fake_article():
+    titles = ["Top 10 Tech Trends", "Why AI is the Future", "How to Stay Productive"]
+    contents = [
+        "<p>This is a trending topic about technology.</p>",
+        "<p>Artificial Intelligence is growing fast!</p>",
+        "<p>Use these tips to stay productive in your work and life.</p>"
+    ]
+    labels = ["Tech", "AI", "Productivity"]
+
+    index = random.randint(0, len(titles) - 1)
+    return titles[index], contents[index], [labels[index]]
+
+if __name__ == "__main__":
+    title, content, labels = generate_fake_article()
+    post_to_blogger(BLOG_ID, title, content, labels)
