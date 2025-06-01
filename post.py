@@ -1,6 +1,6 @@
 import requests
 from auth import get_access_token
-
+from datetime import datetime
 def post_to_blogger(blog_id, title, content, labels=None):
     access_token = get_access_token()
     url = f"https://www.googleapis.com/blogger/v3/blogs/{blog_id}/posts/"
