@@ -1,12 +1,12 @@
-name: 🆕 Create Blog Daily
+name: 📝 Daily Post to Existing Blog
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # ⏰ تشغيل كل يوم الساعة 00:00 منتصف الليل
-  workflow_dispatch:      # ✅ تشغيل يدوي من GitHub عند الحاجة
+    - cron: '0 0 * * *'  # ⏰ يوميًا في منتصف الليل
+  workflow_dispatch:      # ✅ يدويًا أيضًا
 
 jobs:
-  create_blog:
+  post_article:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,9 +21,10 @@ jobs:
       - name: 📦 Install Dependencies
         run: pip install -r requirements.txt
 
-      - name: 🏗️ Run Blog Creation Script
+      - name: 🏗️ Run Posting Script
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          BLOG_ID: ${{ secrets.BLOG_ID }}
         run: python daily_create_blog.py
