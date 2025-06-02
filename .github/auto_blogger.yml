@@ -1,0 +1,41 @@
+name: Auto Blogger Automation
+
+on:
+  schedule:
+    - cron: '0 0 * * *'        # ⏰ تشغيل يومي لإنشاء مدونة جديدة (الساعة 00:00)
+    - cron: '*/30 * * * *'     # ⏰ تشغيل كل 30 دقيقة للنشر
+  workflow_dispatch:           # ✅ تفعيل يدوي من GitHub إذا أردت
+
+jobs:
+  blogger_automation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: 📦 Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: 📝 Create new blog daily (00:00)
+        if: github.event.schedule == '0 0 * * *'
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+        run: python daily_create_blog.py
+
+      - name: ✍️ Post articles every 30 min
+        if: github.event.schedule != '0 0 * * *'
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          BLOG_ID: ${{ secrets.BLOG_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python main.py
