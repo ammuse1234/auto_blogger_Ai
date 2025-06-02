@@ -45,3 +45,8 @@ def post_to_blogger(blog_id, title, content, access_token, labels=None):
         return post['id']
     else:
         raise Exception(f"Failed to post article: {response.text}")
+
+
+
+
+
