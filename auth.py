@@ -1,49 +1,27 @@
+import os
 import requests
-def create_blog(title, description, access_token):
-    url = 'https://www.googleapis.com/blogger/v3/users/self/blogs'
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json'
-    }
+
+def get_access_token():
+    refresh_token = os.environ.get('REFRESH_TOKEN')
+    client_id = os.environ.get('CLIENT_ID')
+    client_secret = os.environ.get('CLIENT_SECRET')
+
+    if not all([refresh_token, client_id, client_secret]):
+        raise Exception("❌ Missing one or more required environment variables: REFRESH_TOKEN, CLIENT_ID, CLIENT_SECRET")
+
+    token_url = 'https://oauth2.googleapis.com/token'
     data = {
-        "kind": "blogger#blog",
-        "name": title,
-        "description": description,
-        "locale": {
-            "language": "en",
-            "country": "US"
-        }
+        'client_id': client_id,
+        'client_secret': client_secret,
+        'refresh_token': refresh_token,
+        'grant_type': 'refresh_token',
     }
 
-    response = requests.post(url, json=data, headers=headers)
-    if response.status_code in [200, 201]:
-        blog = response.json()
-        print(f"✅ Created blog: {blog['name']} (ID: {blog['id']})")
-        return blog['id']
+    response = requests.post(token_url, data=data)
+    if response.status_code == 200:
+        access_token = response.json().get('access_token')
+        if not access_token:
+            raise Exception("❌ Failed to get access_token from response.")
+        return access_token
     else:
-        raise Exception(f"❌ Failed to create blog: {response.status_code} - {response.text}")
-
-
-def post_to_blogger(blog_id, title, content, access_token, labels=None):
-    url = f'https://www.googleapis.com/blogger/v3/blogs/{blog_id}/posts/'
-    headers = {
-        'Authorization': f'Bearer {access_token}',
-        'Content-Type': 'application/json'
-    }
-
-    post_data = {
-        'kind': 'blogger#post',
-        'title': title,
-        'content': content,
-    }
-
-    if labels:
-        post_data['labels'] = labels
-
-    response = requests.post(url, json=post_data, headers=headers)
-    if response.status_code in [200, 201]:
-        post = response.json()
-        print(f"✅ Posted article: {post['title']} (ID: {post['id']})")
-        return post['id']
-    else:
-        raise Exception(f"❌ Failed to post article: {response.status_code} - {response.text}")
+        raise Exception(f"❌ Failed to refresh token: {response.status_code} - {response.text}")
