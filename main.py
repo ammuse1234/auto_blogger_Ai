@@ -5,9 +5,6 @@ from topic_generator import get_trending_topic
 from article_generator import generate_article
 from utils import is_duplicate, save_posted_title
 
-# تأكد من ضبط مفتاح API الخاص بـ OpenAI
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
 # معرف المدونة
 BLOG_ID = os.getenv("BLOG_ID")
 
