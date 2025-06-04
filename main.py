@@ -1,40 +1,37 @@
 import os
-from datetime import datetime
-from post import post_to_blogger
-from topic_generator import get_trending_topic
-from article_generator import generate_article
-from utils import is_duplicate, save_posted_title
+import requests
 
-# معرف المدونة
-BLOG_ID = os.getenv("BLOG_ID")
+# إعداد API key
+HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
+API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
 
-print("🔍 CLIENT_ID:", os.getenv("CLIENT_ID"))
-print("🔍 CLIENT_SECRET:", os.getenv("CLIENT_SECRET"))
-print("🔍 REFRESH_TOKEN:", os.getenv("REFRESH_TOKEN"))
+headers = {
+    "Authorization": f"Bearer {HUGGINGFACE_API_KEY}",
+    "Content-Type": "application/json"
+}
 
-if __name__ == "__main__":
+def generate_article(topic: str) -> str:
+    prompt = f"Write a detailed and informative blog post about: {topic}"
+    
     try:
-        topic = get_trending_topic()
+        payload = {
+            "inputs": prompt,
+            "options": {
+                "use_cache": False,
+                "wait_for_model": True
+            }
+        }
+
+        response = requests.post(API_URL, headers=headers, json=payload)
+        response.raise_for_status()
+        result = response.json()
+
+        if isinstance(result, list) and "generated_text" in result[0]:
+            return result[0]["generated_text"].strip()
+        else:
+            print("⚠️ Unexpected Hugging Face response:", result)
+            return "This is a default article content due to an error in generating the article."
+    
     except Exception as e:
-        print("Error fetching Google Trends:", e)
-        topic = "Latest news updates"
-
-    if is_duplicate(topic):
-        print(f"⏭️ تم تخطي الموضوع المكرر: {topic}")
-    else:
-        print(f"✍️ توليد مقال عن: {topic}")
-        try:
-            content = generate_article(topic)
-        except Exception as e:
-            print("❌ خطأ في توليد المقال:", e)
-            content = "This is a default article content due to error in generating article."
-
-        title = f"{topic} ({datetime.now().strftime('%H:%M')})"
-        labels = ["Trending", "AI", "News"]
-
-        try:
-            post_to_blogger(BLOG_ID, title, content, labels)
-            save_posted_title(topic)
-            print(f"✅ تم النشر: {title}")
-        except Exception as e:
-            print("❌ خطأ في النشر على Blogger:", e)
+        print("❌ Error generating article with Hugging Face:", e)
+        return "This is a default article content due to an error in generating the article."
