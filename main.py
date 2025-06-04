@@ -1,8 +1,12 @@
 import os
-import random
 from datetime import datetime
 from post import post_to_blogger
 import openai
+
+# ملفات الذكاء الاصطناعي والترند
+from topic_generator import get_trending_topic
+from article_generator import generate_article
+from utils import is_duplicate, save_posted_title
 
 # ضبط مفتاح OpenAI
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -10,34 +14,23 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # استدعاء BLOG_ID من المتغيرات السرية
 BLOG_ID = os.getenv("BLOG_ID")
 
-# توليد مقال عشوائي من مجموعة محددة
-def generate_fake_article():
-    titles = [
-        "Top AI Tools for 2025",
-        "How to Stay Productive with Automation",
-        "Trending Topics This Week",
-        "Simple Guide to Blogging with AI",
-        "The Future of Content Creation"
-    ]
-    contents = [
-        "<p>Welcome to today’s post! We explore how AI is changing the content landscape.</p>",
-        "<p>This blog is powered by automation! Here are the benefits...</p>",
-        "<p>Here are the top 5 trends right now:</p><ul><li>AI</li><li>Automation</li><li>SEO</li></ul>",
-        "<p>Blogging has never been easier. Thanks to Python and Google APIs!</p>",
-        "<p>AI is not just the future, it's now. Let's explore how...</p>"
-    ]
-    labels = ["AI", "Automation", "Trends", "Guide", "Future"]
-
-    index = random.randint(0, len(titles) - 1)
-    title = titles[index] + f" ({datetime.now().strftime('%H:%M')})"
-    content = contents[index]
-    selected_label = [labels[index]]
-
-    return title, content, selected_label
+# طباعة معلومات السرية (اختياري للديباغ)
 print("🔍 CLIENT_ID:", os.getenv("CLIENT_ID"))
 print("🔍 CLIENT_SECRET:", os.getenv("CLIENT_SECRET"))
 print("🔍 REFRESH_TOKEN:", os.getenv("REFRESH_TOKEN"))
+
 # تنفيذ النشر
 if __name__ == "__main__":
-    title, content, labels = generate_fake_article()
-    post_to_blogger(BLOG_ID, title, content, labels)
+    topic = get_trending_topic()
+
+    if is_duplicate(topic):
+        print(f"⏭️ تم تخطي الموضوع المكرر: {topic}")
+    else:
+        print(f"✍️ توليد مقال عن: {topic}")
+        content = generate_article(topic)
+        title = f"{topic} ({datetime.now().strftime('%H:%M')})"
+        labels = ["Trending", "AI", "News"]
+
+        post_to_blogger(BLOG_ID, title, content, labels)
+        save_posted_title(topic)
+        print(f"✅ تم النشر: {title}")
