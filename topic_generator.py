@@ -18,7 +18,7 @@ fallback_topics = [
 
 def get_bing_trending_topics():
     try:
-        url = "https://www.bing.com/news/trendingtopics"
+        url = "https://www.bing.com/news/topicview" 
         headers = {
             "User-Agent": "Mozilla/5.0"
         }
