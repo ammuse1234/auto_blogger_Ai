@@ -8,7 +8,7 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-BLOG_ID = os.getenv("BLOG_ID")
+BLOG_ID = os.getenv("BLOG_ID") 
 
 # دالة توليد Access Token من Google
 def get_access_token():
@@ -27,19 +27,19 @@ def get_access_token():
         access_token = res.json().get("access_token")
         return access_token
     except Exception as e:
-        print("❌ Error getting access token:", e)
-        return None  # ✅ إضافة return None عند الفشل
+        print("❌ Error getting access token:", e)5
+        return None
 
-# دالة توليد المقال باستخدام Gemini
+# دالة توليد مقال باستخدام Gemini
 def generate_article(topic: str) -> str:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDSOgakd0CgLzG0h8C1ZXIjMV7OavNax9c"
-
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDSOgakd0CgLzG0h8C1ZXIjMV7OavNax9c"
+    
     headers = {
         "Content-Type": "application/json"
     }
 
     prompt = f"Write a detailed and informative blog post about: {topic}"
-
+    
     payload = {
         "contents": [
             {
@@ -59,14 +59,22 @@ def generate_article(topic: str) -> str:
         print("❌ Error generating article with Gemini:", e)
         return "This is a default article content due to an error in generating the article."
 
+# ✅ دالة تنسيق المقال قبل النشر
+def format_article(article: str, title: str) -> str:
+    paragraphs = article.split("\n")
+    formatted_paragraphs = [f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()]
+    formatted_article = f"<h2>{title}</h2>\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
+    return formatted_article
+
 # الدالة الرئيسية
 def main():
     topic = get_trending_topic()
     print(f"✍️ توليد مقال عن: {topic}")
     article = generate_article(topic)
+    formatted_article = format_article(article, topic)
     access_token = get_access_token()
     if access_token:
-        post_to_blogger(BLOG_ID, topic, article, access_token)
+        post_to_blogger(BLOG_ID, topic, formatted_article, access_token)
     else:
         print("❌ Failed to get access token. Skipping post.")
 
