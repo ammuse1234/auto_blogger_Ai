@@ -6,7 +6,6 @@ google-auth-oauthlib
 google-auth-httplib2
 pytrends
 schedule
-google-generativeai
 tqdm
 python-dotenv
 beautifulsoup4
