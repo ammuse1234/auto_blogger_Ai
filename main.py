@@ -9,9 +9,8 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 BLOG_ID = os.getenv("BLOG_ID")
-
+HF_API_URL = "https://api-inference.huggingface.co/models/facebook/opt-125m"
 # رابط Hugging Face
-HF_API_URL = "https://api-inference.huggingface.co/models/gpt2"
 # دالة توليد Access Token من Google
 def get_access_token():
     print("🔐 Getting access token from Google...")
