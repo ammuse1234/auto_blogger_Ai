@@ -61,8 +61,21 @@ def generate_article(topic: str) -> str:
 
 # ✅ دالة تنسيق المقال قبل النشر
 def format_article(article: str, title: str) -> str:
+    # 🔧 تنظيف التهميشات والتنسيقات غير المرغوبة
+    article = re.sub(r"\*{1,2}(.*?)\*{1,2}", r"\1", article)         # إزالة *bold* أو **bold**
+    article = re.sub(r"\_{1,2}(.*?)\_{1,2}", r"\1", article)         # إزالة _italic_ أو __italic__
+    article = re.sub(r"^\s*>\s*", "", article, flags=re.MULTILINE)   # إزالة علامات الاقتباس > 
+    article = re.sub(r".*?.*?", "", article)                 # إزالة الروابط [text](url)
+    article = re.sub(r"\!.*?.*?", "", article)               # إزالة الصور ![alt](url)
+    article = re.sub(r".*?", "", article)                        # إزالة الهوامش مثل [1] أو [note]
+    article = re.sub(r"---+", "", article)                           # إزالة الفواصل ---
+    article = re.sub(r"\*\s+", "", article)                          # إزالة النقاط من القوائم *
+
+    # ✨ تنسيق الفقرات بإضافة <p> لكل فقرة
     paragraphs = article.split("\n")
     formatted_paragraphs = [f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()]
+    
+    # 🏷️ إضافة عنوان المقال وفاصل
     formatted_article = f"<h2>{title}</h2>\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
     return formatted_article
 
