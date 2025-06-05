@@ -1,7 +1,9 @@
 import os
 import requests
+from topics import get_trending_topic
+from blogger import post_to_blogger
 
-# إعداد API key
+# إعداد Hugging Face API
 HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
 
@@ -10,6 +12,7 @@ headers = {
     "Content-Type": "application/json"
 }
 
+# دالة توليد المقال
 def generate_article(topic: str) -> str:
     prompt = f"Write a detailed and informative blog post about: {topic}"
     
@@ -35,3 +38,13 @@ def generate_article(topic: str) -> str:
     except Exception as e:
         print("❌ Error generating article with Hugging Face:", e)
         return "This is a default article content due to an error in generating the article."
+
+# الدالة الرئيسية
+def main():
+    topic = get_trending_topic()
+    print(f"✍️ توليد مقال عن: {topic}")
+    article = generate_article(topic)
+    post_to_blogger(topic, article)
+
+if __name__ == "__main__":
+    main()
