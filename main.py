@@ -11,8 +11,7 @@ HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 BLOG_ID = os.getenv("BLOG_ID")
 
 # رابط Hugging Face
-HF_API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
-
+HF_API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-large"
 # دالة توليد Access Token من Google
 def get_access_token():
     print("🔐 Getting access token from Google...")
