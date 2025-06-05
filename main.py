@@ -8,7 +8,8 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REFRESH_TOKEN = os.getenv("REFRESH_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-BLOG_ID = os.getenv("BLOG_ID") 
+BLOG_ID = os.getenv("BLOG_ID")
+
 # دالة توليد Access Token من Google
 def get_access_token():
     print("🔐 Getting access token from Google...")
@@ -27,16 +28,18 @@ def get_access_token():
         return access_token
     except Exception as e:
         print("❌ Error getting access token:", e)
+        return None  # ✅ إضافة return None عند الفشل
 
+# دالة توليد المقال باستخدام Gemini
 def generate_article(topic: str) -> str:
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
-    
+
     headers = {
         "Content-Type": "application/json"
     }
 
     prompt = f"Write a detailed and informative blog post about: {topic}"
-    
+
     payload = {
         "contents": [
             {
@@ -51,65 +54,7 @@ def generate_article(topic: str) -> str:
         response = requests.post(url, headers=headers, json=payload)
         response.raise_for_status()
         result = response.json()
-        
         return result["candidates"][0]["content"]["parts"][0]["text"].strip()
-    
-    except Exception as e:
-        print("❌ Error generating article with Gemini:", e)
-        return "This is a default article content due to an error in generating the article."def generate_article(topic: str) -> str:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
-    
-    headers = {
-        "Content-Type": "application/json"
-    }
-
-    prompt = f"Write a detailed and informative blog post about: {topic}"
-    
-    payload = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": prompt}
-                ]
-            }
-        ]
-    }
-
-    try:
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-        result = response.json()
-        
-        return result["candidates"][0]["content"]["parts"][0]["text"].strip()
-    
-    except Exception as e:
-        print("❌ Error generating article with Gemini:", e)
-        return "This is a default article content due to an error in generating the article."def generate_article(topic: str) -> str:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
-    
-    headers = {
-        "Content-Type": "application/json"
-    }
-
-    prompt = f"Write a detailed and informative blog post about: {topic}"
-    
-    payload = {
-        "contents": [
-            {
-                "parts": [
-                    {"text": prompt}
-                ]
-            }
-        ]
-    }
-
-    try:
-        response = requests.post(url, headers=headers, json=payload)
-        response.raise_for_status()
-        result = response.json()
-        
-        return result["candidates"][0]["content"]["parts"][0]["text"].strip()
-    
     except Exception as e:
         print("❌ Error generating article with Gemini:", e)
         return "This is a default article content due to an error in generating the article."
