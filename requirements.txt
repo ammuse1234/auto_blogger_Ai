@@ -10,3 +10,5 @@ tqdm
 python-dotenv
 beautifulsoup4
 google-generativeai
+re
+urllib.parse
