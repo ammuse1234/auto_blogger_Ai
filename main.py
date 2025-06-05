@@ -27,7 +27,7 @@ def get_access_token():
         access_token = res.json().get("access_token")
         return access_token
     except Exception as e:
-        print("❌ Error getting access token:", e)5
+        print("❌ Error getting access token:", e)
         return None
 
 # دالة توليد مقال باستخدام Gemini
