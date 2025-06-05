@@ -1,4 +1,6 @@
 import os
+import re
+import urllib.parse
 import requests
 from topic_generator import get_trending_topic
 from blogger import post_to_blogger
@@ -78,6 +80,10 @@ def format_article(article: str, title: str) -> str:
     # 🏷️ إضافة عنوان المقال وفاصل
     formatted_article = f"<h2>{title}</h2>\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
     return formatted_article
+    
+        query = urllib.parse.quote(title)
+    image_url = f"https://source.unsplash.com/800x400/?{query}"
+    image_tag = f'<img src="{image_url}" alt="{title}" style="width:100%;border-radius:12px;margin-bottom:15px;" />'
 
 # الدالة الرئيسية
 def main():
