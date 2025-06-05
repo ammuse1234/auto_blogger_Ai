@@ -80,12 +80,21 @@ def format_article(article: str, title: str) -> str:
     # 🏷️ إضافة عنوان المقال وفاصل
     formatted_article = f"<h2>{title}</h2>\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
     return formatted_article
-    
-        query = urllib.parse.quote(title)
-    image_url = f"https://source.unsplash.com/800x400/?{query}"
-    image_tag = f'<img src="{image_url}" alt="{title}" style="width:100%;border-radius:12px;margin-bottom:15px;" />'
 
-# الدالة الرئيسية
+import urllib.parse
+import random
+
+def get_image_html(query: str) -> str:
+    # تحويل العنوان ليكون جزء من بحث الصور
+    query = urllib.parse.quote(query)
+    
+    # قائمة روابط صور بحث Google (غير رسمية ولكن فعالة لبعض الاستخدامات)
+    base_url = "https://source.unsplash.com/800x400/?"
+    image_url = f"{base_url}{query}"
+
+    return f'<img src="{image_url}" alt="{query}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
+
+# الدلة الرئيسية
 def main():
     topic = get_trending_topic()
     print(f"✍️ توليد مقال عن: {topic}")
