@@ -1,6 +1,6 @@
 import os
 import requests
-from topics import get_trending_topic
+from topic_generator import get_trending_topic
 from blogger import post_to_blogger
 
 # إعداد متغيرات البيئة
