@@ -32,7 +32,7 @@ def get_access_token():
 
 # دالة توليد المقال باستخدام Gemini
 def generate_article(topic: str) -> str:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://gemini.google.com/app={GEMINI_API_KEY}"
 
     headers = {
         "Content-Type": "application/json"
