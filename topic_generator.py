@@ -1,5 +1,6 @@
-from pytrends.request import TrendReq
+import requests
 import random
+from bs4 import BeautifulSoup
 from utils import is_duplicate
 
 fallback_topics = [
@@ -15,20 +16,35 @@ fallback_topics = [
     "Clean Energy Innovations"
 ]
 
+def get_bing_trending_topics():
+    try:
+        url = "https://www.bing.com/news/trendingtopics"
+        headers = {
+            "User-Agent": "Mozilla/5.0"
+        }
+
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.text, "html.parser")
+        topics = [a.get_text(strip=True) for a in soup.select("a.title")]
+
+        return topics if topics else []
+    except Exception as e:
+        print("❌ Error fetching Bing Trends:", e)
+        return []
+
 def get_trending_topic():
     try:
-        pytrends = TrendReq(hl='en-US', tz=360)
-        trending_searches_df = pytrends.trending_searches(pn='united_states')
-
-        if not trending_searches_df.empty:
-            topics = trending_searches_df[0].tolist()
+        topics = get_bing_trending_topics()
+        if topics:
             random.shuffle(topics)
             for topic in topics:
                 if not is_duplicate(topic):
                     return topic
             print("⚠️ All trending topics were already used. Using fallback.")
     except Exception as e:
-        print("❌ Error fetching Google Trends:", e)
+        print("❌ Error getting trending topic:", e)
 
     # إذا فشل كل شيء، اختر من القائمة الاحتياطية وتجنب التكرار
     fallback_available = [t for t in fallback_topics if not is_duplicate(t)]
