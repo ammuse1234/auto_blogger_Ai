@@ -1,11 +1,11 @@
 import os
 import requests
 
-# إعداد API Key
+# إعداد API Key من البيئة
 HF_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
 
-# اسم النموذج المستخدم (يمكنك تغييره حسب النموذج المتاح)
-MODEL_NAME = "mistralai/Mixtral-8x7B-Instruct-v0.1"  # مثال قوي ومجاني
+# ✅ نموذج مجاني مضمون يعمل على الخطة المجانية
+MODEL_NAME = "HuggingFaceH4/zephyr-7b-beta"
 
 def generate_article(topic: str) -> str:
     prompt = f"Write a detailed and informative blog post about: {topic}"
