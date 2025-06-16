@@ -2,6 +2,7 @@ import os
 import time
 import re
 import urllib.parse
+from utils import is_duplicate, save_posted_title
 import requests
 from topic_generator import get_trending_topic
 from blogger import post_to_blogger
@@ -125,6 +126,9 @@ def format_article(article: str, title: str) -> str:
 def main():
     topic = get_trending_topic()
     print(f"✍️ توليد مقال عن: {topic}")
+    if is_duplicate(topic):
+        print(f"⚠️ المقال '{topic}' تم نشره سابقًا. سيتم تجاهله.")
+        return  # يوقف التنفيذ
     article = generate_article(topic)
     formatted_article = format_article(article, topic)
     access_token = get_access_token()
