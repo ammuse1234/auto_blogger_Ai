@@ -72,20 +72,23 @@ def get_image_html(topic: str) -> str:
     base_url = "https://source.unsplash.com/800x400/?"
     query = urllib.parse.quote(topic)
     image_url = f"{base_url}{query}"
-    
-    # التحقق من صلاحية الرابط
+
+    # التحقق من وجود صورة حقيقية، وإلا استخدم كلمة احتياطية قريبة
     try:
         test_response = requests.get(image_url, timeout=5)
-        if test_response.status_code != 200 or "image" not in test_response.headers.get("Content-Type", ""):
-            # إذا الرابط ما جاب صورة، استخدم كلمة بديلة
-            image_url = f"{base_url}technology"
+        if test_response.status_code != 200 or 'image' not in test_response.headers.get("Content-Type", ""):
+            fallback_query = "news," + query.split(",")[0]  # مثلا لو topic = Bad Bunny => fallback = "news,Bad Bunny"
+            image_url = f"{base_url}{urllib.parse.quote(fallback_query)}"
     except:
-        image_url = f"{base_url}technology"
+        image_url = f"{base_url}news"
 
     return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
-
+    
 def format_article(article: str, title: str) -> str:
-    # 🔧 تنظيف التنسيقات
+    # 🔧 تنظيف الرموز الغريبة والتنسيقات
+    article = re.sub(r"[\u200B-\u200D\uFEFF]", "", article)  # رموز غير مرئية
+    article = re.sub(r"#\w+", "", article)  # إزالة الهاشتاقات مثل #Topic
+    article = re.sub(r"[^\x00-\x7F]+", " ", article)  # إزالة أي رموز غير ASCII
     article = re.sub(r"\*{1,2}(.*?)\*{1,2}", r"\1", article)
     article = re.sub(r"\_{1,2}(.*?)\_{1,2}", r"\1", article)
     article = re.sub(r"^\s*>\s*", "", article, flags=re.MULTILINE)
