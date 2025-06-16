@@ -47,7 +47,7 @@ def generate_article(topic: str) -> str:
 - Exclusive content, high value content
 - Clear subheadings, Write the sources under the blog only. 
 - Natural tone and smooth flow  
-- Short paragraphs, Dive into the information and make it impactful.
+- Short paragraphs, Dive into the information and make it influential.
 - A personal or reflective conclusion, Write creatively, discuss and compare like make  tables. 
 Avoid robotic language, repetition, or markdown. Output plain text only. Around 700-800 words."""
     
