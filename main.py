@@ -40,7 +40,14 @@ def generate_article(topic: str) -> str:
         "Content-Type": "application/json"
     }
 
-    prompt = f"Write a detailed and informative blog post about: {topic}"
+    prompt = f"""Write a detailed and informative blog post about: {topic}.It should be informative, engaging, and formatted well.
+ Use:
+- A friendly introduction  
+- Clear subheadings  
+- Natural tone and smooth flow  
+- Short paragraphs  
+- A personal or reflective conclusion  
+Avoid robotic language, repetition, or markdown. Output plain text only. Around 800 words."""
     
     payload = {
         "contents": [
@@ -60,39 +67,34 @@ def generate_article(topic: str) -> str:
     except Exception as e:
         print("❌ Error generating article with Gemini:", e)
         return "This is a default article content due to an error in generating the article."
+        
+def get_image_html(topic: str) -> str:
+    query = urllib.parse.quote(topic)
+    image_url = f"https://source.unsplash.com/800x400/?{query}"
+    return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
 
-# ✅ دالة تنسيق المقال قبل النشر
+
 def format_article(article: str, title: str) -> str:
-    # 🔧 تنظيف التهميشات والتنسيقات غير المرغوبة
-    article = re.sub(r"\*{1,2}(.*?)\*{1,2}", r"\1", article)         # إزالة *bold* أو **bold**
-    article = re.sub(r"\_{1,2}(.*?)\_{1,2}", r"\1", article)         # إزالة _italic_ أو __italic__
-    article = re.sub(r"^\s*>\s*", "", article, flags=re.MULTILINE)   # إزالة علامات الاقتباس > 
-    article = re.sub(r".*?.*?", "", article)                 # إزالة الروابط [text](url)
-    article = re.sub(r"\!.*?.*?", "", article)               # إزالة الصور ![alt](url)
-    article = re.sub(r".*?", "", article)                        # إزالة الهوامش مثل [1] أو [note]
-    article = re.sub(r"---+", "", article)                           # إزالة الفواصل ---
-    article = re.sub(r"\*\s+", "", article)                          # إزالة النقاط من القوائم *
+    # 🔧 تنظيف التنسيقات
+    article = re.sub(r"\*{1,2}(.*?)\*{1,2}", r"\1", article)
+    article = re.sub(r"\_{1,2}(.*?)\_{1,2}", r"\1", article)
+    article = re.sub(r"^\s*>\s*", "", article, flags=re.MULTILINE)
+    article = re.sub(r".*?.*?", "", article)
+    article = re.sub(r"\!.*?.*?", "", article)
+    article = re.sub(r".*?", "", article)
+    article = re.sub(r"---+", "", article)
+    article = re.sub(r"\*\s+", "", article)
 
-    # ✨ تنسيق الفقرات بإضافة <p> لكل فقرة
+    # ✨ تنسيق الفقرات
     paragraphs = article.split("\n")
     formatted_paragraphs = [f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()]
-    
-    # 🏷️ إضافة عنوان المقال وفاصل
-    formatted_article = f"<h2>{title}</h2>\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
+
+    # 🖼️ إضافة صورة أول المقال
+    image_html = get_image_html(title)
+
+    # 🏷️ بناء المقال النهائي
+    formatted_article = f"<h2>{title}</h2>\n{image_html}\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
     return formatted_article
-
-import urllib.parse
-import random
-
-def get_image_html(query: str) -> str:
-    # تحويل العنوان ليكون جزء من بحث الصور
-    query = urllib.parse.quote(query)
-    
-    # قائمة روابط صور بحث Google (غير رسمية ولكن فعالة لبعض الاستخدامات)
-    base_url = "https://source.unsplash.com/800x400/?"
-    image_url = f"{base_url}{query}"
-
-    return f'<img src="{image_url}" alt="{query}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
 
 # الدلة الرئيسية
 def main():
