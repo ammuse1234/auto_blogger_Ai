@@ -1,4 +1,5 @@
 import os
+import time
 import re
 import urllib.parse
 import requests
@@ -46,8 +47,8 @@ def generate_article(topic: str) -> str:
 - Exclusive content, high value content
 - Clear subheadings, Write the sources under the blog only. 
 - Natural tone and smooth flow  
-- Short paragraphs, Write deep and influential information
-- A personal or reflective conclusion, Write creatively, discuss and compare. 
+- Short paragraphs, Dive into the information and make it impactful.
+- A personal or reflective conclusion, Write creatively, discuss and compare like make  tables. 
 Avoid robotic language, repetition, or markdown. Output plain text only. Around 700-800 words."""
     
     payload = {
@@ -69,32 +70,18 @@ Avoid robotic language, repetition, or markdown. Output plain text only. Around 
         print("❌ Error generating article with Gemini:", e)
         return "This is a default article content due to an error in generating the article."
 
-PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY")  # تأكد أنك أضفته في البيئة
-
 def get_image_html(topic: str) -> str:
-    base_url = "https://pixabay.com/api/"
-    query = urllib.parse.quote(topic)
-    params = {
-        "key": PIXABAY_API_KEY,
-        "q": query,
-        "image_type": "photo",
-        "per_page": 5,
-        "safesearch": "true"
-    }
-
     try:
-        response = requests.get(base_url, params=params, timeout=5)
-        data = response.json()
+        query = urllib.parse.quote(topic)
+        image_url = f"https://image.pollinations.ai/prompt/{query}"
+        
+        # ننتظر 5 ثواني لتأكيد جاهزية الصورة
+        time.sleep(5)
 
-        if data.get("hits"):
-            image_url = data["hits"][0]["webformatURL"]
-        else:
-            image_url = "https://via.placeholder.com/800x400?text=No+Image+Found"
+        return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
     except Exception as e:
-        print("❌ Error fetching image:", e)
-        image_url = "https://via.placeholder.com/800x400?text=Image+Error"
-
-    return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
+        print("❌ Error generating AI image:", e)
+        return '<img src="https://via.placeholder.com/800x400?text=Image+Error" alt="Error Image" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
 
     
 def format_article(article: str, title: str) -> str:
