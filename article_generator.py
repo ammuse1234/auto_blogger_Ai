@@ -15,7 +15,7 @@ def generate_article(topic: str) -> str:
     Use:
 - A friendly introduction
 - Exclusive content, high value content.
-- Clear subheadings, Write the sources under the blog.  
+- Clear subheadings, Write the link of  sources under the blog.  
 - Natural tone and smooth flow  
 - Short paragraphs, Write deep and influential information.
 - A personal or reflective conclusion, Write creatively, discuss and compare..
