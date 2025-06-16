@@ -13,7 +13,8 @@ model = genai.GenerativeModel("gemini-pro")
 def generate_article(topic: str) -> str:
     prompt = f"""Write a detailed, well-structured blog article about: {topic}. It should be informative, engaging, and formatted well.
     Use:
-- A friendly introduction  
+- A friendly introduction
+- Exclusive content
 - Clear subheadings  
 - Natural tone and smooth flow  
 - Short paragraphs  
