@@ -43,12 +43,12 @@ def generate_article(topic: str) -> str:
     prompt = f"""Write a detailed and informative blog post about: {topic}.It should be informative, engaging, and formatted well.
  Use:
 - A friendly introduction
-- Exclusive content
-- Clear subheadings  
+- Exclusive content, high value content
+- Clear subheadings, Write the sources under the blog
 - Natural tone and smooth flow  
-- Short paragraphs  
-- A personal or reflective conclusion  
-Avoid robotic language, repetition, or markdown. Output plain text only. Around 800 words."""
+- Short paragraphs, Write deep and influential information
+- A personal or reflective conclusion, Write creatively, discuss and compare. 
+Avoid robotic language, repetition, or markdown. Output plain text only. Around 700-800 words."""
     
     payload = {
         "contents": [
