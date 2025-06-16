@@ -67,28 +67,33 @@ Avoid robotic language, repetition, or markdown. Output plain text only. Around 
     except Exception as e:
         print("❌ Error generating article with Gemini:", e)
         return "This is a default article content due to an error in generating the article."
-        
+
+PIXABAY_API_KEY = os.getenv("PIXABAY_API_KEY")  # تأكد أنك أضفته في البيئة
+
 def get_image_html(topic: str) -> str:
-    base_url = "https://source.unsplash.com/800x400/?"
+    base_url = "https://pixabay.com/api/"
     query = urllib.parse.quote(topic)
-    temp_url = f"{base_url}{query}"
+    params = {
+        "key": PIXABAY_API_KEY,
+        "q": query,
+        "image_type": "photo",
+        "per_page": 5,
+        "safesearch": "true"
+    }
 
     try:
-        # نسمح بالتحويل للوصول للرابط النهائي للصورة
-        response = requests.get(temp_url, timeout=5, allow_redirects=True)
+        response = requests.get(base_url, params=params, timeout=5)
+        data = response.json()
 
-        # إذا فعلاً رجّع صورة
-        if "image" in response.headers.get("Content-Type", ""):
-            final_image_url = response.url
+        if data.get("hits"):
+            image_url = data["hits"][0]["webformatURL"]
         else:
-            # fallback إذا ما طلعت صورة فعلية
-            fallback_query = "news," + query.split(",")[0]
-            response = requests.get(f"{base_url}{fallback_query}", timeout=5, allow_redirects=True)
-            final_image_url = response.url if "image" in response.headers.get("Content-Type", "") else f"{base_url}technology"
-    except:
-        final_image_url = f"{base_url}technology"
+            image_url = "https://via.placeholder.com/800x400?text=No+Image+Found"
+    except Exception as e:
+        print("❌ Error fetching image:", e)
+        image_url = "https://via.placeholder.com/800x400?text=Image+Error"
 
-    return f'<img src="{final_image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
+    return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
 
     
 def format_article(article: str, title: str) -> str:
