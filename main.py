@@ -71,18 +71,25 @@ Avoid robotic language, repetition, or markdown. Output plain text only. Around 
 def get_image_html(topic: str) -> str:
     base_url = "https://source.unsplash.com/800x400/?"
     query = urllib.parse.quote(topic)
-    image_url = f"{base_url}{query}"
+    temp_url = f"{base_url}{query}"
 
-    # التحقق من وجود صورة حقيقية، وإلا استخدم كلمة احتياطية قريبة
     try:
-        test_response = requests.get(image_url, timeout=5)
-        if test_response.status_code != 200 or 'image' not in test_response.headers.get("Content-Type", ""):
-            fallback_query = "news," + query.split(",")[0]  # مثلا لو topic = Bad Bunny => fallback = "news,Bad Bunny"
-            image_url = f"{base_url}{urllib.parse.quote(fallback_query)}"
-    except:
-        image_url = f"{base_url}news"
+        # نسمح بالتحويل للوصول للرابط النهائي للصورة
+        response = requests.get(temp_url, timeout=5, allow_redirects=True)
 
-    return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
+        # إذا فعلاً رجّع صورة
+        if "image" in response.headers.get("Content-Type", ""):
+            final_image_url = response.url
+        else:
+            # fallback إذا ما طلعت صورة فعلية
+            fallback_query = "news," + query.split(",")[0]
+            response = requests.get(f"{base_url}{fallback_query}", timeout=5, allow_redirects=True)
+            final_image_url = response.url if "image" in response.headers.get("Content-Type", "") else f"{base_url}technology"
+    except:
+        final_image_url = f"{base_url}technology"
+
+    return f'<img src="{final_image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
+
     
 def format_article(article: str, title: str) -> str:
     # 🔧 تنظيف الرموز الغريبة والتنسيقات
