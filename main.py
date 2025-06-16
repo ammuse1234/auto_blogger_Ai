@@ -69,24 +69,32 @@ Avoid robotic language, repetition, or markdown. Output plain text only. Around 
     except Exception as e:
         print("❌ Error generating article with Gemini:", e)
         return "This is a default article content due to an error in generating the article."
-
+        
 def get_image_html(topic: str) -> str:
-    try:
-        query = urllib.parse.quote(topic)
-        image_url = f"https://image.pollinations.ai/prompt/{query}"
+    query = urllib.parse.quote(f"{topic}, digital art, 800x400")
+    image_url = f"https://image.pollinations.ai/prompt/{query}"
 
-        # تأكيد جاهزية الصورة
-        time.sleep(5)
+    for attempt in range(3):
+        try:
+            print(f"🖼️ محاولة تحميل الصورة رقم {attempt + 1}")
+            response = requests.get(image_url, timeout=15)
 
-        # اختبار هل الصورة تولدت فعلاً (اختياري لكنه مفيد)
-        test = requests.get(image_url, timeout=18)
-        if test.status_code != 200:
-            raise Exception("Image not found or failed")
+            if response.status_code == 200 and "image" in response.headers.get("Content-Type", ""):
+                return f'''
+                <img src="{image_url}" alt="{topic}" 
+                style="width:100%;max-width:800px;height:auto;
+                aspect-ratio:2/1;border-radius:12px;margin-bottom:15px;">
+                '''
+        except Exception as e:
+            print(f"⚠️ محاولة {attempt + 1} فشلت: {e}")
+            time.sleep(2)
 
-        return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
-    except Exception as e:
-        print("❌ Error generating AI image:", e)
-        return '<img src="https://via.placeholder.com/800x400?text=Image+Error" alt="Error Image" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
+    print("❌ فشل تحميل الصورة بعد 3 محاولات")
+    return '''
+    <img src="https://via.placeholder.com/800x400?text=Image+Error" alt="Error Image" 
+    style="width:100%;max-width:800px;height:auto;aspect-ratio:2/1;
+    border-radius:12px;margin-bottom:15px;">
+    '''
     
 def format_article(article: str, title: str) -> str:
     # 🔧 تنظيف الرموز الغريبة والتنسيقات
