@@ -79,7 +79,7 @@ def get_image_html(topic: str) -> str:
         time.sleep(5)
 
         # اختبار هل الصورة تولدت فعلاً (اختياري لكنه مفيد)
-        test = requests.get(image_url, timeout=5)
+        test = requests.get(image_url, timeout=15)
         if test.status_code != 200:
             raise Exception("Image not found or failed")
 
