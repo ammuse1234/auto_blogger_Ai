@@ -74,15 +74,19 @@ def get_image_html(topic: str) -> str:
     try:
         query = urllib.parse.quote(topic)
         image_url = f"https://image.pollinations.ai/prompt/{query}"
-        
-        # ننتظر 5 ثواني لتأكيد جاهزية الصورة
+
+        # تأكيد جاهزية الصورة
         time.sleep(5)
+
+        # اختبار هل الصورة تولدت فعلاً (اختياري لكنه مفيد)
+        test = requests.get(image_url, timeout=5)
+        if test.status_code != 200:
+            raise Exception("Image not found or failed")
 
         return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
     except Exception as e:
         print("❌ Error generating AI image:", e)
         return '<img src="https://via.placeholder.com/800x400?text=Image+Error" alt="Error Image" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
-
     
 def format_article(article: str, title: str) -> str:
     # 🔧 تنظيف الرموز الغريبة والتنسيقات
