@@ -69,10 +69,20 @@ Avoid robotic language, repetition, or markdown. Output plain text only. Around 
         return "This is a default article content due to an error in generating the article."
         
 def get_image_html(topic: str) -> str:
+    base_url = "https://source.unsplash.com/800x400/?"
     query = urllib.parse.quote(topic)
-    image_url = f"https://source.unsplash.com/800x400/?{query}"
-    return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
+    image_url = f"{base_url}{query}"
+    
+    # التحقق من صلاحية الرابط
+    try:
+        test_response = requests.get(image_url, timeout=5)
+        if test_response.status_code != 200 or "image" not in test_response.headers.get("Content-Type", ""):
+            # إذا الرابط ما جاب صورة، استخدم كلمة بديلة
+            image_url = f"{base_url}technology"
+    except:
+        image_url = f"{base_url}technology"
 
+    return f'<img src="{image_url}" alt="{topic}" style="max-width:100%;height:auto;border-radius:12px;margin-bottom:15px;">'
 
 def format_article(article: str, title: str) -> str:
     # 🔧 تنظيف التنسيقات
