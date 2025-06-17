@@ -97,7 +97,8 @@ def get_image_html(topic: str) -> str:
     style="width:100%;max-width:800px;height:auto;aspect-ratio:2/1;
     border-radius:12px;margin-bottom:15px;">
     '''
-    
+    import re
+
 def format_article(article: str, title: str) -> str:
     # 🔧 تنظيف الرموز الغريبة والتنسيقات
     article = re.sub(r"[\u200B-\u200D\uFEFF]", "", article)  # رموز غير مرئية
@@ -112,59 +113,56 @@ def format_article(article: str, title: str) -> str:
     article = re.sub(r"---+", "", article)
     article = re.sub(r"\*\s+", "", article)
     article = re.sub(r"(?m)^\s{0,3}#{1,6}\s*", "", article)
-    article = article.encode('ascii', 'ignore').decode('ascii')  # يزيل أي رمز مش ASCII
-    # 🧠 تحليل الفقرات
+    article = article.encode('ascii', 'ignore').decode('ascii')  # إزالة أي رمز غير ASCII
+
     paragraphs = article.split("\n")
     formatted_paragraphs = []
-     def is_subheading(p: str) -> bool:
-    words = p.split()
-    if len(words) > 10:
-        return False
 
-    starts_with_cap = p[0].isupper()
-    ends_without_punct = not p.strip().endswith(('.', '!', '?'))
-    has_few_verbs = not re.search(r"\b(is|are|was|were|have|has|had|do|does|did|can|should|could)\b", p, re.IGNORECASE)
-    contains_heading_keywords = re.search(r"\b(introduction|summary|conclusion|overview|benefits|pros|cons|tips|steps|key points|examples|how to|why|what is|types|guide|reasons|methods|strategies)\b", p, re.IGNORECASE)
+    # تعريف دالة لاختيار العناوين الفرعية
+    def is_subheading(p: str) -> bool:
+        words = p.split()
+        if len(words) > 10:
+            return False
 
-    score = sum([
-        starts_with_cap,
-        ends_without_punct,
-        has_few_verbs,
-        bool(contains_heading_keywords)
-    ])
-    
-    return score >= 2  # على الأقل شرطين متحققين
-
-# استخدام الدالة داخل الفور لوب
-for p in paragraphs:
-    p = p.strip()
-    if not p:
-        continue
-
-    if is_subheading(p):
-        formatted_paragraphs.append(
-            f'<h3 style="color:#2c3e50;font-size:20px;margin-top:30px;margin-bottom:15px;font-weight:bold;font-family:Arial,sans-serif;">{p}</h3>'
+        starts_with_cap = p[0].isupper()
+        ends_without_punct = not p.strip().endswith(('.', '!', '?'))
+        has_few_verbs = not re.search(r"\b(is|are|was|were|have|has|had|do|does|did|can|should|could)\b", p, re.IGNORECASE)
+        contains_heading_keywords = re.search(
+            r"\b(introduction|summary|conclusion|overview|benefits|pros|cons|tips|steps|key points|examples|how to|why|what is|types|guide|reasons|methods|strategies|final thoughts)\b",
+            p,
+            re.IGNORECASE,
         )
-    else:
-        formatted_paragraphs.append(
-            f'<p style="margin:15px 0;line-height:1.8;font-size:17px;color:#333;font-family:Arial,sans-serif;">{p}</p>'
-)
+
+        score = sum([
+            starts_with_cap,
+            ends_without_punct,
+            has_few_verbs,
+            bool(contains_heading_keywords)
+        ])
+
+        return score >= 2  # على الأقل شرطين متحققين
+
+    # تنسيق الفقرات باستخدام دالة is_subheading
     for p in paragraphs:
         p = p.strip()
         if not p:
             continue
 
-        # لو الفقرة قصيرة وتبدو كعنوان -> خليها h3
-        if len(p.split()) <= 6 or re.match(r"(?i)^(introduction|summary|conclusion|overview|benefits|pros|cons|tips|steps|key points|final thoughts)\b", p.strip(), re.IGNORECASE):
-            formatted_paragraphs.append(f'<h3 style="color:#2c3e50;margin-top:25px;margin-bottom:10px;">{p}</h3>')
+        if is_subheading(p):
+            formatted_paragraphs.append(
+                f'<h3 style="color:#2c3e50;font-size:20px;margin-top:30px;margin-bottom:15px;font-weight:bold;font-family:Arial,sans-serif;">{p}</h3>'
+            )
         else:
-            formatted_paragraphs.append(f'<p style="margin:15px 0;line-height:1.8;font-size:17px;color:#333;font-family:Arial, sans-serif;">{p}</p>') 
+            formatted_paragraphs.append(
+                f'<p style="margin:15px 0;line-height:1.8;font-size:17px;color:#333;font-family:Arial,sans-serif;">{p}</p>'
+            )
 
     # 🖼️ إضافة صورة أول المقال
     image_html = get_image_html(title)
     if not title.strip() or len(title.strip()) < 4:
-                                 title = "path to grow" 
- # 📦 تجميع المقال النهائي
+        title = "Path to Grow"
+
+    # 📦 تجميع المقال النهائي
     formatted_article = f'''
     <div style="text-align:center;margin-bottom:20px;">
         {image_html}
@@ -176,6 +174,7 @@ for p in paragraphs:
     <hr style="margin-top:30px;">
     '''
     return formatted_article
+
 
 # الدلة الرئيسية
 def main():
