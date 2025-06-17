@@ -111,7 +111,8 @@ def format_article(article: str, title: str) -> str:
     article = re.sub(r".*?", "", article)
     article = re.sub(r"---+", "", article)
     article = re.sub(r"\*\s+", "", article)
-
+    # إزالة كل الرموز المشوشة حتى لو كانت UTF-8 أو ZWJ
+    article = article.encode('ascii', 'ignore').decode('ascii')  # يزيل أي رمز مش ASCII
     # 🧠 تحليل الفقرات
     paragraphs = article.split("\n")
     formatted_paragraphs = []
