@@ -97,7 +97,6 @@ def get_image_html(topic: str) -> str:
     style="width:100%;max-width:800px;height:auto;aspect-ratio:2/1;
     border-radius:12px;margin-bottom:15px;">
     '''
-    import re
 
 def format_article(article: str, title: str) -> str:
     # 🔧 تنظيف الرموز الغريبة والتنسيقات
