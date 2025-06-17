@@ -72,7 +72,8 @@ Avoid robotic language, repetition, or markdown. Output plain text only. Around 
         return "This is a default article content due to an error in generating the article."
         
 def get_image_html(topic: str) -> str:
-    query = urllib.parse.quote(f"{topic}, digital art, 800x400")
+    safe_topic = re.sub(r"[^\w\s]", "", topic)  # إزالة الرموز مثل % و ’ و –
+    query = urllib.parse.quote(f"{safe_topic}, digital art, 800x400") 
     image_url = f"https://image.pollinations.ai/prompt/{query}"
 
     for attempt in range(3):
@@ -100,8 +101,8 @@ def get_image_html(topic: str) -> str:
 def format_article(article: str, title: str) -> str:
     # 🔧 تنظيف الرموز الغريبة والتنسيقات
     article = re.sub(r"[\u200B-\u200D\uFEFF]", "", article)  # رموز غير مرئية
-    article = re.sub(r"#\w+", "", article)  # إزالة الهاشتاقات مثل #Topic
-    article = re.sub(r"[^\x00-\x7F]+", " ", article)  # إزالة أي رموز غير ASCII
+    article = re.sub(r"#\w+", "", article)  # إزالة الهاشتاقات
+    article = re.sub(r"[^\x00-\x7F]+", " ", article)  # إزالة رموز غير ASCII
     article = re.sub(r"\*{1,2}(.*?)\*{1,2}", r"\1", article)
     article = re.sub(r"\_{1,2}(.*?)\_{1,2}", r"\1", article)
     article = re.sub(r"^\s*>\s*", "", article, flags=re.MULTILINE)
@@ -111,14 +112,25 @@ def format_article(article: str, title: str) -> str:
     article = re.sub(r"---+", "", article)
     article = re.sub(r"\*\s+", "", article)
 
-    # ✨ تنسيق الفقرات
+    # 🧠 تحليل الفقرات
     paragraphs = article.split("\n")
-    formatted_paragraphs = [f"<p>{p.strip()}</p>" for p in paragraphs if p.strip()]
+    formatted_paragraphs = []
+
+    for p in paragraphs:
+        p = p.strip()
+        if not p:
+            continue
+
+        # لو الفقرة قصيرة وتبدو كعنوان -> خليها h3
+        if len(p.split()) <= 6 or re.match(r"(?i)^(introduction|summary|conclusion|overview|benefits|pros|cons|tips|steps|key points|final thoughts)\b", p.strip(), re.IGNORECASE):
+            formatted_paragraphs.append(f"<h3>{p}</h3>")
+        else:
+            formatted_paragraphs.append(f"<p>{p}</p>")
 
     # 🖼️ إضافة صورة أول المقال
     image_html = get_image_html(title)
 
-    # 🏷️ بناء المقال النهائي
+    # 📦 تجميع المقال النهائي
     formatted_article = f"<h2>{title}</h2>\n{image_html}\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
     return formatted_article
 
