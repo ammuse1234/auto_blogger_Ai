@@ -116,7 +116,39 @@ def format_article(article: str, title: str) -> str:
     # 🧠 تحليل الفقرات
     paragraphs = article.split("\n")
     formatted_paragraphs = []
+     def is_subheading(p: str) -> bool:
+    words = p.split()
+    if len(words) > 10:
+        return False
 
+    starts_with_cap = p[0].isupper()
+    ends_without_punct = not p.strip().endswith(('.', '!', '?'))
+    has_few_verbs = not re.search(r"\b(is|are|was|were|have|has|had|do|does|did|can|should|could)\b", p, re.IGNORECASE)
+    contains_heading_keywords = re.search(r"\b(introduction|summary|conclusion|overview|benefits|pros|cons|tips|steps|key points|examples|how to|why|what is|types|guide|reasons|methods|strategies)\b", p, re.IGNORECASE)
+
+    score = sum([
+        starts_with_cap,
+        ends_without_punct,
+        has_few_verbs,
+        bool(contains_heading_keywords)
+    ])
+    
+    return score >= 2  # على الأقل شرطين متحققين
+
+# استخدام الدالة داخل الفور لوب
+for p in paragraphs:
+    p = p.strip()
+    if not p:
+        continue
+
+    if is_subheading(p):
+        formatted_paragraphs.append(
+            f'<h3 style="color:#2c3e50;font-size:20px;margin-top:30px;margin-bottom:15px;font-weight:bold;font-family:Arial,sans-serif;">{p}</h3>'
+        )
+    else:
+        formatted_paragraphs.append(
+            f'<p style="margin:15px 0;line-height:1.8;font-size:17px;color:#333;font-family:Arial,sans-serif;">{p}</p>'
+)
     for p in paragraphs:
         p = p.strip()
         if not p:
