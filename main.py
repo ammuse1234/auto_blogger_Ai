@@ -131,7 +131,14 @@ def format_article(article: str, title: str) -> str:
     image_html = get_image_html(title)
 
     # 📦 تجميع المقال النهائي
-    formatted_article = f"<h2>{title}</h2>\n{image_html}\n" + "\n".join(formatted_paragraphs) + "\n<hr>"
+    formatted_article = f'''
+<div style="text-align:center;">
+  {image_html}
+  <h2 style="margin-top:10px;">{title}</h2>
+</div>
+{''.join(formatted_paragraphs)}
+<hr>
+'''
     return formatted_article
 
 # الدلة الرئيسية
