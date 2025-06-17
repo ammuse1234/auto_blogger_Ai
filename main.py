@@ -47,7 +47,7 @@ def generate_article(topic: str) -> str:
 - A friendly introduction
 - Exclusive content, high value content
 - Clear subheadings, Write the sources under the blog only. 
-- Natural tone and smooth flow  
+- Natural tone and smooth flow,  Write without symbols between words or subtitles.
 - Short paragraphs, Dive into the information and make it influential.
 - A personal or reflective conclusion, Write creatively, discuss and compare like make  tables. 
 Avoid robotic language, repetition, or markdown. Output plain text only. Around 700-800 words."""
@@ -78,7 +78,7 @@ def get_image_html(topic: str) -> str:
     for attempt in range(3):
         try:
             print(f"🖼️ محاولة تحميل الصورة رقم {attempt + 1}")
-            response = requests.get(image_url, timeout=15)
+            response = requests.get(image_url, timeout=19)
 
             if response.status_code == 200 and "image" in response.headers.get("Content-Type", ""):
                 return f'''
