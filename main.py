@@ -123,23 +123,25 @@ def format_article(article: str, title: str) -> str:
 
         # لو الفقرة قصيرة وتبدو كعنوان -> خليها h3
         if len(p.split()) <= 6 or re.match(r"(?i)^(introduction|summary|conclusion|overview|benefits|pros|cons|tips|steps|key points|final thoughts)\b", p.strip(), re.IGNORECASE):
-            formatted_paragraphs.append(f"<h3>{p}</h3>")
+            formatted_paragraphs.append(f'<h3 style="color:#2c3e50;margin-top:25px;margin-bottom:10px;">{p}</h3>')
         else:
-            formatted_paragraphs.append(f"<p>{p}</p>")
+            formatted_paragraphs.append(f'<p style="margin:15px 0;line-height:1.8;font-size:17px;color:#333;font-family:Arial, sans-serif;">{p}</p>') 
 
     # 🖼️ إضافة صورة أول المقال
     image_html = get_image_html(title)
     if not title.strip() or len(title.strip()) < 4:
                                  title = "path to grow" 
-    # 📦 تجميع المقال النهائي
+ # 📦 تجميع المقال النهائي
     formatted_article = f'''
-<div style="text-align:center;">
-  {image_html}
-  <h2 style="margin-top:10px;">{title}</h2>
-</div>
-{''.join(formatted_paragraphs)}
-<hr>
-'''
+    <div style="text-align:center;margin-bottom:20px;">
+        {image_html}
+        <h2 style="margin-top:10px;font-size:28px;color:#2c3e50;font-family:Arial,sans-serif;">{title}</h2>
+    </div>
+    <div style="padding:10px;">
+        {''.join(formatted_paragraphs)}
+    </div>
+    <hr style="margin-top:30px;">
+    '''
     return formatted_article
 
 # الدلة الرئيسية
