@@ -129,7 +129,8 @@ def format_article(article: str, title: str) -> str:
 
     # 🖼️ إضافة صورة أول المقال
     image_html = get_image_html(title)
-
+    if not title.strip() or len(title.strip()) < 4:
+                                 title = "path to grow" 
     # 📦 تجميع المقال النهائي
     formatted_article = f'''
 <div style="text-align:center;">
