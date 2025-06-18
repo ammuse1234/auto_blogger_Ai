@@ -24,7 +24,7 @@ def create_blog(title, description, access_token):
     else:
         raise Exception(f"Failed to create blog: {response.text}")
 
-def post_to_blogger(blog_id, title, content, access_token, labels=None):
+def post_to_blogger(blog_id, title, content, access_token, labels=None, meta_description=None):
     url = f'https://www.googleapis.com/blogger/v3/blogs/{blog_id}/posts/'
     headers = {
         'Authorization': f'Bearer {access_token}',
@@ -34,8 +34,11 @@ def post_to_blogger(blog_id, title, content, access_token, labels=None):
         'kind': 'blogger#post',
         'title': title,
         'content': content,
-        'metaDescription': meta_description,
+        'postMetaDescription': meta_description,
     }
+    if meta_description:
+        
+    post_data['postMetaDescription'] = meta_description
     if labels:
         post_data['labels'] = labels
 
