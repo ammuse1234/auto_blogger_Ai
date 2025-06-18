@@ -9,9 +9,9 @@ def load_posted_titles():
 
 def save_posted_title(title):
     posted = load_posted_titles()
-    posted.append(title)
+    posted.append(title.strip().lower())
     with open("posted_articles.json", "w") as file:
         json.dump(posted, file)
 
 def is_duplicate(title):
-    return title in load_posted_titles()
+    return title.strip().lower() in load_posted_titles()
