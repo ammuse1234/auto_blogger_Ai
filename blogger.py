@@ -34,6 +34,7 @@ def post_to_blogger(blog_id, title, content, access_token, labels=None):
         'kind': 'blogger#post',
         'title': title,
         'content': content,
+        'metaDescription': meta_description,
     }
     if labels:
         post_data['labels'] = labels
