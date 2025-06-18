@@ -36,9 +36,10 @@ def post_to_blogger(blog_id, title, content, access_token, labels=None, meta_des
         'content': content,
     }
     if meta_description:
-    post_data['postMetaDescription'] = meta_description
-if labels:
-    post_data['labels'] = labels
+        post_data['postMetaDescription'] = meta_description
+    if labels:
+        post_data['labels'] = labels
+
     response = requests.post(url, json=post_data, headers=headers)
     if response.status_code == 200 or response.status_code == 201:
         post = response.json()
