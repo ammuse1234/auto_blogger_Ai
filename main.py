@@ -8,8 +8,6 @@ from topic_generator import get_trending_topic
 from blogger import post_to_blogger
 from meta_generator import generate_meta_description
 
-meta_description = generate_meta_description(title, article)
-
 # إعداد متغيرات البيئة
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
@@ -186,6 +184,7 @@ def main():
         print(f"⚠️ المقال '{topic}' تم نشره سابقًا. سيتم تجاهله.")
         return  # يوقف التنفيذ
     article = generate_article(topic)
+    meta_description = generate_meta_description(topic, article)
     formatted_article = format_article(article, topic)
     access_token = get_access_token()
     if access_token:
