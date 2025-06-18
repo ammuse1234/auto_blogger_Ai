@@ -188,7 +188,7 @@ def main():
     formatted_article = format_article(article, topic)
     access_token = get_access_token()
     if access_token:
-        post_to_blogger(BLOG_ID, topic, formatted_article, access_token)
+        post_to_blogger(BLOG_ID, topic, formatted_article, access_token, meta_description=meta_description)
         save_posted_title(topic)
     else:
         print("❌ Failed to get access token. Skipping post.")
