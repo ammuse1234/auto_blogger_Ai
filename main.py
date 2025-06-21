@@ -7,7 +7,11 @@ import requests
 from topic_generator import get_trending_topic
 from blogger import post_to_blogger
 from meta_generator import generate_meta_description
-
+# ✅ تأكد من وجود ملف posted_articles.json داخل مجلد السكربت
+POSTED_FILE_PATH = os.path.join(os.path.dirname(__file__), "posted_articles.json")
+if not os.path.exists(POSTED_FILE_PATH):
+    with open(POSTED_FILE_PATH, "w", encoding="utf-8") as f:
+        json.dump([], f)
 # إعداد متغيرات البيئة
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
