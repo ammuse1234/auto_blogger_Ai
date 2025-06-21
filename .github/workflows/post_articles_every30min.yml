@@ -18,7 +18,6 @@ jobs:
         continue-on-error: true  # ✅ يمنع الفشل إذا لم يكن الملف موجوداً بعد
         with:
           name: posted-articles
-          path: auto_blogger_Ai
 
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
