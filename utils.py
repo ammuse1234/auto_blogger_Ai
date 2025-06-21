@@ -4,6 +4,7 @@ import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 POSTED_FILE_PATH = os.path.join(BASE_DIR, "posted_articles.json")
+os.makedirs(os.path.dirname(POSTED_FILE_PATH), exist_ok=True)
 
 def normalize_title(title: str) -> str:
     title = title.lower().strip()
