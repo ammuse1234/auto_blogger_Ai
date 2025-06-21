@@ -13,6 +13,12 @@ jobs:
       - name: ✅ Checkout Repository
         uses: actions/checkout@v3
 
+      - name: 📥 Download posted_articles.json artifact (if exists)
+        uses: actions/download-artifact@v3
+        with:
+          name: posted-articles
+          path: auto_blogger_Ai
+
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
@@ -29,3 +35,9 @@ jobs:
           BLOG_ID: ${{ secrets.BLOG_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
+
+      - name: 📤 Upload posted_articles.json artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: posted-articles
+          path: auto_blogger_Ai/posted_articles.json
