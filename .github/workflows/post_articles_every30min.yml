@@ -13,7 +13,7 @@ jobs:
       - name: ✅ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 📥 Download auto_blogger_Ai/posted_articles.json artifact (if exists)
+      - name: 📥 Download posted_articles.json artifact (if exists)
         uses: actions/download-artifact@v4
         continue-on-error: true  # ✅ يمنع الفشل إذا لم يكن الملف موجوداً بعد
         with:
@@ -36,7 +36,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
 
-      - name: 📤 Upload auto_blogger_Ai/posted_articles.json artifact
+      - name: 📤 Upload posted_articles.json artifact
         uses: actions/upload-artifact@v4
         with:
           name: posted-articles
