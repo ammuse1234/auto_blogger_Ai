@@ -3,9 +3,8 @@ import os
 import re
 
 # 🔍 تحديد المسار الكامل لملف posted_articles.json داخل نفس مجلد السكربت
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-POSTED_FILE_PATH = os.path.join(BASE_DIR, "posted_articles.json")
 
+POSTED_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "posted_articles.json")
 # 🔄 دالة لتوحيد العنوان قبل حفظه أو مقارنته
 def normalize_title(title: str) -> str:
     title = title.lower().strip()
