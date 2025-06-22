@@ -42,7 +42,7 @@ jobs:
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
           BLOG_ID: ${{ secrets.BLOG_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python auto_blogger_Ai/main.py
+        run: python main.py
 
       - name: 📤 Upload posted_articles.json artifact
         uses: actions/upload-artifact@v4
