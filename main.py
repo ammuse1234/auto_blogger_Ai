@@ -176,22 +176,24 @@ def format_article(article: str, title: str) -> str:
 
 
 # الدلة الرئيسية
-
 def main():
     if not os.path.exists("posted_articles.json"):
-    with open("posted_articles.json", "w", encoding="utf-8") as f:
-        json.dump([], f)
-        
-    print("📄 Created empty posted_articles.json")
+        with open("posted_articles.json", "w", encoding="utf-8") as f:
+            json.dump([], f)
+        print("📄 Created empty posted_articles.json")
+
     topic = get_trending_topic()
     print(f"✍️ توليد مقال عن: {topic}")
+    
     if is_duplicate(topic):
         print(f"⚠️ المقال '{topic}' تم نشره سابقًا. سيتم تجاهله.")
         return  # يوقف التنفيذ
+
     article = generate_article(topic)
     meta_description = generate_meta_description(topic, article)
     formatted_article = format_article(article, topic)
     access_token = get_access_token()
+
     if access_token:
         post_to_blogger(BLOG_ID, topic, formatted_article, access_token, meta_description=meta_description)
         save_posted_title(topic)
@@ -199,4 +201,4 @@ def main():
         print("❌ Failed to get access token. Skipping post.")
 
 if __name__ == "__main__":
-    main()
+    main() 
