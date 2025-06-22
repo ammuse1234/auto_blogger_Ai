@@ -13,20 +13,6 @@ jobs:
       - name: ✅ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 📥 Download posted_articles.json artifact (if exists)
-        uses: actions/download-artifact@v4
-        continue-on-error: true  # ✅ لا يفشل لو الملف مش موجود (أول مرة مثلاً)
-        with:
-          name: posted-articles
-
-      - name: 📂 Move downloaded posted_articles.json to correct folder
-        run: |
-          if [ -f posted-articles/posted_articles.json ]; then
-            mv posted-articles/posted_articles.json auto_blogger_Ai/posted_articles.json
-          else
-            echo "⚠️ No posted_articles.json found to move"
-          fi
-
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
         with:
@@ -44,8 +30,12 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
 
-      - name: 📤 Upload posted_articles.json artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: posted-articles
-          path: posted_articles.json
+      - name: 💾 Commit updated posted_articles.json
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add posted_articles.json
+          git commit -m "🔄 Update posted_articles.json"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
