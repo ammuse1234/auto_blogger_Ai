@@ -3,7 +3,7 @@ import os
 import re
 
 # 🔍 تحديد المسار الكامل لملف posted_articles.json داخل نفس مجلد السكربت
-POSTED_FILE_PATH = os.path.join(os.getcwd(), "posted_articles.json")
+POSTED_FILE_PATH = os.path.join(os.path.dirname(__file__), "posted_articles.json") 
 print(f"Using posted articles file at: {POSTED_FILE_PATH}") 
 # 🔄 دالة لتوحيد العنوان قبل حفظه أو مقارنته
 def normalize_title(title: str) -> str:
