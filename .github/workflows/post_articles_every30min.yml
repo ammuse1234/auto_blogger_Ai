@@ -15,16 +15,17 @@ jobs:
 
       - name: 📥 Download posted_articles.json artifact (if exists)
         uses: actions/download-artifact@v4
-        continue-on-error: true  # ✅ يمنع الفشل إذا لم يكن الملف موجوداً بعد
+        continue-on-error: true  # ✅ لا يفشل لو الملف مش موجود (أول مرة مثلاً)
         with:
           name: posted-articles
-      - name: 📂 Move downloaded posted_articles.json to root
+
+      - name: 📂 Move downloaded posted_articles.json to correct folder
         run: |
-                if [ -f posted-articles/posted_articles.json ]; then
-                  mv posted-articles/posted_articles.json posted_articles.json
-                else
-                echo "⚠️ No posted_articles.json found to move"
-                     fi
+          if [ -f posted-articles/posted_articles.json ]; then
+            mv posted-articles/posted_articles.json auto_blogger_Ai/posted_articles.json
+          else
+            echo "⚠️ No posted_articles.json found to move"
+          fi
 
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
@@ -41,14 +42,10 @@ jobs:
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
           BLOG_ID: ${{ secrets.BLOG_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python main.py
+        run: python auto_blogger_Ai/main.py
 
       - name: 📤 Upload posted_articles.json artifact
         uses: actions/upload-artifact@v4
         with:
           name: posted-articles
-          path: posted_articles.json
-
-
-
-
+          path: auto_blogger_Ai/posted_articles.json
