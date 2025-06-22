@@ -18,6 +18,13 @@ jobs:
         continue-on-error: true  # ✅ يمنع الفشل إذا لم يكن الملف موجوداً بعد
         with:
           name: posted-articles
+      - name: 📂 Move downloaded posted_articles.json to root
+        run: |
+                if [ -f posted-articles/posted_articles.json ]; then
+                  mv posted-articles/posted_articles.json posted_articles.json
+                else
+                echo "⚠️ No posted_articles.json found to move"
+                     fi
 
       - name: 🐍 Set up Python
         uses: actions/setup-python@v4
