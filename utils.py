@@ -2,7 +2,7 @@ import json
 import os
 import re
 
-POSTED_FILE_PATH = os.path.join(os.path.dirname(__file__), "posted_articles.json")
+POSTED_FILE_PATH = "posted_articles.json"
 print(f"Using posted articles file at: {POSTED_FILE_PATH}")
 
 def normalize_title(title: str) -> str:
