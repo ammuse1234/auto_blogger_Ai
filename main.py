@@ -177,6 +177,10 @@ def format_article(article: str, title: str) -> str:
 
 # الدلة الرئيسية
 def main():
+    if not os.path.exists("posted_articles.json"):
+    with open("posted_articles.json", "w", encoding="utf-8") as f:
+        json.dump([], f)
+    print("📄 Created empty posted_articles.json")
     topic = get_trending_topic()
     print(f"✍️ توليد مقال عن: {topic}")
     if is_duplicate(topic):
