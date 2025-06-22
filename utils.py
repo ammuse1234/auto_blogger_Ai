@@ -25,7 +25,6 @@ def save_posted_title(title):
     normalized_title = normalize_title(title)
     if normalized_title not in posted:
         posted.append(normalized_title)
-        os.makedirs(os.path.dirname(POSTED_FILE_PATH), exist_ok=True)
         with open(POSTED_FILE_PATH, "w", encoding="utf-8") as file:
             json.dump(posted, file, ensure_ascii=False, indent=2)
         print(f"✅ Saved title to {POSTED_FILE_PATH}")
