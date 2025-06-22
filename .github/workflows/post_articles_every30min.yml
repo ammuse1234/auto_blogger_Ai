@@ -48,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: posted-articles
-          path: auto_blogger_Ai/posted_articles.json
+          path: posted_articles.json
