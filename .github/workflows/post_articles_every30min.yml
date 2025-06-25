@@ -32,13 +32,13 @@ jobs:
 
       - name: 💾 Commit updated posted_articles.json
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add posted_articles.json
-          if git diff --cached --quiet;then
-          echo "no changes to commit."
+          if git diff --cached --quiet; then
+            echo "no changes to commit."
           else
-          git commit -m "🔄 Update posted_articles.json"
-          git push
+            git commit -m "🔄 Update posted_articles.json"
+            git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
