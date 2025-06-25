@@ -40,5 +40,6 @@ jobs:
           else
             git commit -m "🔄 Update posted_articles.json"
             git push
+           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
