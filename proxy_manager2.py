@@ -167,6 +167,6 @@ if __name__ == "__main__":
     validate_proxies_parallel(proxies[:200])
 
     print("📊 Top proxies by endurance:")
-    best get_top_proxies()
+    best = get_top_proxies()
     for p in best:
         print(f"✔️ {p}")
