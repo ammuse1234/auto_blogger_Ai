@@ -2,7 +2,6 @@ import random
 import time
 import requests
 from message_generator import generate_message
-from mastodon_poster import MastodonPoster
 from get_articles import get_articles
 from bs4 import BeautifulSoup
 import proxy_manager  # ملف إدارة البروكسيات
