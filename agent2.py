@@ -4,7 +4,7 @@ import requests
 from message_generator import generate_message
 from get_articles import get_articles
 from bs4 import BeautifulSoup
-import proxy_manager  # ملف إدارة البروكسيات
+import proxy_manager2 # ملف إدارة البروكسيات
 
 mastodon = MastodonPoster()
 
