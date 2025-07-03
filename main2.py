@@ -3,6 +3,7 @@ import time
 import threading
 from proxy_manager import get_required_proxies, is_proxy_working, quick_check
 from agent2 import Agent
+import concurrent.futures 
 
 def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
     proxy = initial_proxy
@@ -94,5 +95,12 @@ for i in range(agent_count):
     sleep_time = random.randint(60, 180)
     print(f"⏳ Sleeping {sleep_time} seconds before next agent...")
     time.sleep(sleep_time)
+    
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=agent_count) as executor:
+    for i in range(agent_count):
+        proxy = final_proxies[i]
+        remaining = final_proxies[:i] + final_proxies[i+1:]
+        executor.submit(run_agent_with_auto_restart, Agent, proxy, remaining)
 
 print("✅ All agents completed.")
