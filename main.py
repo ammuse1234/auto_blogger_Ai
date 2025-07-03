@@ -84,6 +84,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=agent_count) as executor:
     for i in range(agent_count):
         proxy = final_proxies[i]
         remaining = final_proxies[:i] + final_proxies[i+1:]
+        print(f"\n🚀 Starting Agent #{i+1} with proxy: {proxy}")
 
         delay_before = random.randint(60, 180)
         print(f"\n🕒 Waiting {delay_before}s before launching Agent #{i+1} with proxy: {proxy}")
