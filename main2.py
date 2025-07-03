@@ -1,7 +1,7 @@
 import random
 import time
 import threading
-from proxy_manager2 import get_required_proxies, is_proxy_working, quick_check
+from proxy_manager import get_required_proxies, is_proxy_working, quick_check
 from agent2 import Agent
 
 def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
