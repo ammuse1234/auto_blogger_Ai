@@ -31,7 +31,7 @@ class Agent:
     def simulate_human_behavior(self, url):
         attempt = 0
         while True:
-        print(f"👀 Visiting: {url}")
+            print(f"👀 Visiting: {url}")
             try:
                 response = requests.get(url, proxies=self.proxy, timeout=10)
                 response.raise_for_status()
@@ -94,12 +94,12 @@ class Agent:
                         message = generate_message(article_url)
                         print(f"📝 Message: {message}")
 
-                        #print("🐘 Posting to Mastodon...")
-                        #success = mastodon.post(message, article_url)
-                        #if not success:
-                            #print("⚠️ Failed to post to Mastodon.")
+                        # print("🐘 Posting to Mastodon...")
+                        # success = mastodon.post(message, article_url)
+                        # if not success:
+                        #     print("⚠️ Failed to post to Mastodon.")
 
-                        #time.sleep(random.randint(8, 15))
+                        # time.sleep(random.randint(8, 15))
 
                     except Exception as e:
                         print(f"❌ Error handling article {article_url}: {e}")
