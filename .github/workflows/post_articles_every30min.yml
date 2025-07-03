@@ -2,7 +2,8 @@ name: ✍️ Auto Post Articles Every 30 Minutes
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # ⏰ تشغيل كل 30 دقيقة
+    - cron: '* /
+    7 * * * *'  # ⏰ تشغيل كل 30 دقيقة
   workflow_dispatch:         # ✅ إمكانية التشغيل اليدوي
 
 jobs:
