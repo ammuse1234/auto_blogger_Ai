@@ -156,6 +156,17 @@ def get_required_proxies(required_count=50, max_attempts=10):
             break
         time.sleep(2)
     return list(all_valid)[:required_count]
+    # ✅ تسجيل فشل البروكسي (مستخدمة في agent.py)
+def report_failure(proxy):
+    if proxy in proxy_db:
+        proxy_db[proxy]["fail_count"] += 1
+    else:
+        proxy_db[proxy] = {
+            "success_count": 0,
+            "fail_count": 1,
+            "avg_runtime": 0.0,
+            "currently_used_by": 0,
+        }
 
 # ✅ للتشغيل المباشر لاختبار النظام
 if __name__ == "__main__":
@@ -170,14 +181,4 @@ if __name__ == "__main__":
     best = get_top_proxies()
     for p in best:
         print(f"✔️ {p}")
-        # ✅ تسجيل فشل البروكسي (مستخدمة في agent.py)
-def report_failure(proxy):
-    if proxy in proxy_db:
-        proxy_db[proxy]["fail_count"] += 1
-    else:
-        proxy_db[proxy] = {
-            "success_count": 0,
-            "fail_count": 1,
-            "avg_runtime": 0.0,
-            "currently_used_by": 0,
-        }
+        
