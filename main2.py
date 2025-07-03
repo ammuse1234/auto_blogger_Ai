@@ -50,7 +50,7 @@ def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
 
 # ----------------- بداية البرنامج --------------------
 
-agent_count = random.randint(1, 1)
+agent_count = random.randint(1, 2)
 print(f"🔢 Running {agent_count} agents...")
 
 final_proxies = []
