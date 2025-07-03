@@ -4,6 +4,8 @@ import threading
 from proxy_manager import get_required_proxies, is_proxy_working, quick_check
 from agent2 import Agent
 import concurrent.futures
+print("🚀 Script started")
+print("🔧 Fetching proxies...")
 
 def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
     proxy = initial_proxy
