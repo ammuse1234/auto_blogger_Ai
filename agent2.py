@@ -29,14 +29,15 @@ class Agent:
         self.set_proxy(new_proxy)
 
     def simulate_human_behavior(self, url):
-        print(f"👀 Visiting: {url}")
+        attempt = 0
         while True:
+        print(f"👀 Visiting: {url}")
             try:
                 response = requests.get(url, proxies=self.proxy, timeout=10)
                 response.raise_for_status()
                 soup = BeautifulSoup(response.text, 'html.parser')
 
-                scroll_time = random.uniform(5, 12)
+                scroll_time = random.uniform(8, 12)
                 print(f"🕒 Simulating read time: {int(scroll_time)}s")
                 time.sleep(scroll_time)
 
@@ -81,7 +82,7 @@ class Agent:
 
                     if articles is None or len(articles) == 0:
                         print("⚠️ No articles found, retrying in 30s...")
-                        time.sleep(30)
+                        time.sleep(20)
 
                 selected_articles = random.sample(
                     articles, min(len(articles), random.randint(3, 5))
