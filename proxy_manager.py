@@ -170,3 +170,14 @@ if __name__ == "__main__":
     best = get_top_proxies()
     for p in best:
         print(f"✔️ {p}")
+        # ✅ تسجيل فشل البروكسي (مستخدمة في agent.py)
+def report_failure(proxy):
+    if proxy in proxy_db:
+        proxy_db[proxy]["fail_count"] += 1
+    else:
+        proxy_db[proxy] = {
+            "success_count": 0,
+            "fail_count": 1,
+            "avg_runtime": 0.0,
+            "currently_used_by": 0,
+        }
