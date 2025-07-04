@@ -49,7 +49,7 @@ def run_agent_with_auto_restart(agent_class, initial_proxy, remaining_proxies):
 # ----------------- بداية البرنامج --------------------
 
 # ✅ تحديد عدد الـ Agents عشوائيًا بين 5 و 10 (حسب طلبك سابقًا)
-agent_count = random.randint(1, 2)
+agent_count = random.randint(5, 7)
 print(f"🔢 Running {agent_count} agents...")
 
 final_proxies = []
