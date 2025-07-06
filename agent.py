@@ -21,7 +21,7 @@ class Agent:
             response = requests.get(url, proxies=self.proxy, timeout=10)
             soup = BeautifulSoup(response.text, 'html.parser')
 
-            scroll_time = random.uniform(5, 12)
+            scroll_time = random.uniform(40, 70)
             print(f"🕒 Simulating read time: {int(scroll_time)}s")
             time.sleep(scroll_time)
 
