@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-BLOG_URL = "https://ammuse12345.blogspot.com"
+BLOG_URL = "https://inspirat12.blogspot.com"
 
 def is_proxy_working(proxy):
     """
