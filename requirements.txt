@@ -3,3 +3,5 @@ beautifulsoup4
 praw
 Mastodon.py
 pytumblr
+undetected-chromedriver
+selenium
