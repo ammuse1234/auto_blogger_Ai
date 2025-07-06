@@ -2,7 +2,7 @@ name: Run Ai agnets
 
 on:
   schedule:
-    - cron: "0 7 * * *"  # تشغيل يوميًا الساعة 7 صباحًا بتوقيت UTC
+    - cron: '0 * * * *'  # تشغيل يوميًا الساعة 7 صباحًا بتوقيت UTC
   workflow_dispatch:     # تشغيل يدوي عند الحاجة
 
 jobs:
