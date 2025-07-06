@@ -25,7 +25,7 @@ class Agent:
         options.add_argument(f"--proxy-server=http://{self.proxy}")
 
         try:
-            driver = uc.Chrome(options=options)
+            driver = uc.Chrome(optionsoptions, version_main=137)
             driver.get(url)
 
             # ⏳ وقت التفاعل
