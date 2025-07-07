@@ -7,6 +7,7 @@ from get_articles import get_articles
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 mastodon = MastodonPoster()
 
@@ -18,7 +19,7 @@ class Agent:
         print(f"🌐 Opening browser for: {url}")
 
         options = uc.ChromeOptions()
-        options.headless = True
+        options.headless = False  # ضروري لعرض الإعلانات فعليًا
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-blink-features=AutomationControlled")
@@ -26,9 +27,17 @@ class Agent:
 
         try:
             driver = uc.Chrome(options=options, version_main=137)
+            driver.set_window_size(1280, 800)
             driver.get(url)
 
-            # ⏳ وقت التفاعل
+            # ⏳ تأخير لتحميل الإعلانات والصفحة بالكامل
+            time.sleep(random.uniform(5, 8))
+
+            # 🖱️ حركة ماوس وهمية + نقرة
+            actions = ActionChains(driver)
+            actions.move_by_offset(100, 100).click().perform()
+
+            # ⏳ وقت التفاعل والتمرير
             scroll_time = random.uniform(40, 70)
             print(f"🕒 Simulating read time: {int(scroll_time)}s")
 
@@ -37,6 +46,7 @@ class Agent:
                 driver.execute_script("window.scrollBy(0, 200);")
                 time.sleep(random.uniform(1, 2))
 
+            # ⌨️ تفاعل نهائي مع الصفحة
             print("🧠 Simulating final user interaction...")
             body = driver.find_element(By.TAG_NAME, "body")
             body.send_keys(Keys.PAGE_DOWN)
