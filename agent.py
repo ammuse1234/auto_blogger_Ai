@@ -19,7 +19,7 @@ class Agent:
         print(f"🌐 Opening browser for: {url}")
 
         options = uc.ChromeOptions()
-        options.headless = False  # ضروري لعرض الإعلانات فعليًا
+        options.headless = True  # تفعيل الوضع headless
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-blink-features=AutomationControlled")
@@ -33,7 +33,7 @@ class Agent:
             # ⏳ تأخير لتحميل الإعلانات والصفحة بالكامل
             time.sleep(random.uniform(5, 8))
 
-            # 🖱️ حركة ماوس وهمية + نقرة
+            # 🖱️ حركة ماوس وهمية + نقرة (في headless قد لا يظهر تأثير الماوس لكن الأفضل تبقيها)
             actions = ActionChains(driver)
             actions.move_by_offset(100, 100).click().perform()
 
